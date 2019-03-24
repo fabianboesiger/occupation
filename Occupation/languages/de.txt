@@ -56,24 +56,6 @@ Dein Account ist noch nicht aktiviert. Bitte überprüfe den Posteingang der E-M
 Dieser Link ist veraltet. Bitte suche nach einem neueren Link oder <a href="/profile/email">ändere deine E-Mail Adresse</a> um ein neues Aktivierungs-Mail zu erhalten.
 nicht aktiviert
 Account löschen
-Möchtest du diesen Account wirklich löschen? <strong>Die Löschung eines Accounts kann nicht rückgängig gemacht werden.</strong>
-Du verfügst derzeit über Administratorrechte.
-Artikel erstellen
-Artikel löschen
-Artikel publizieren
-Artikel verstecken
-Artikel bearbeiten
-Schlagzeile
-Vorspann
-Inhalt
-Kommentar verfassen
-Kommentare
-Unbekannter Autor
-Kommentar löschen
-Veröffentlicht
-Versteckt
-Neuer Artikel veröffentlicht
-{{print get "author" variables}} hat einen neuen Artikel veröffentlicht!
-Lese den ganzen Artikel <a href="{{print get "url" variables}}/articles/article/{{print get "id" variables}}">hier</a>.
+Möchtest du diesen Account wirklich löschen? Die Löschung eines Accounts kann nicht rückgängig gemacht werden.
 Benachrichtigungen aktivieren
 Benachrichtigungen deaktivieren

@@ -56,24 +56,6 @@ Your account is not activated. Check the inbox of the email address you provided
 This link is outdated. Please check for a newer link or <a href="/profile/email">change your email address</a> to recieve a new activation email.
 not activated
 Delete account
-Do you really want to delete your account? <strong>The deletion of an account can't be reversed.</strong>
-You currently have administrator rights.
-Create article
-Delete article
-Publish article
-Hide article
-Edit article
-Headline
-Lead
-Content
-Write a Comment
-Comments
-Unknown Author
-Delete Comment
-Published
-Hidden
-New Article Published
-{{print get "author" variables}} has published a new article!
-Read the full article <a href="{{print get "url" variables}}/articles/article/{{print get "id" variables}}">here</a>.
+Do you really want to delete your account? The deletion of an account can't be reversed.
 Enable Notifications
 Disable Notifications
