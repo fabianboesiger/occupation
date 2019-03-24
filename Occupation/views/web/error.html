@@ -1,0 +1,16 @@
+{{include "top.html"}}
+<h2>{{print translate "error"}} {{print get "code" variables}}</h2>
+<h3>{{print translate get "message" variables}}</h3>
+{{
+    if exists "error" variables
+        print "<pre>"
+        print get "error" variables
+    end
+
+    if equals get "code" variables 404
+        print "<div style=\"position: relative;\">"
+        print "<img id=\"travolta\" src=\"/media/images/john-travolta.gif\"/>"
+        print "</div>"
+    end
+}}
+{{include "bottom.html"}}

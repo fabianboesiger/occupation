@@ -1,0 +1,32 @@
+{{include "top.html"}}
+	<h2>
+		{{
+			if equals get "username" variables null
+				print translate "hello"
+				print ", "
+				print translate "world"
+				print "!"
+			end
+			if not equals get "username" variables null
+				print translate "hello"
+				print ", "
+				print htmlencode get "username" variables
+				print "!"
+			end
+		}}
+	</h2>
+	{{
+		if equals get "username" variables null
+			print "<p>"
+			print translate "welcome"
+			print " "
+			print translate "introduction"
+			print "</p>"
+		end
+		if not equals get "username" variables null
+			print "<p>"
+			print translate "welcome"
+			print "</p>"
+		end
+	}}
+{{include "bottom.html"}}

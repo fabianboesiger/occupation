@@ -1,0 +1,47 @@
+{{include "top.html"}}
+<h2>{{print translate "articles"}}</h2>
+{{
+	if not equals get "admin" variables null
+        if get "admin" variables
+            print "<a class=\"button\" href=\"/articles/create\">"
+            print translate "create-article"
+            print "</a>"
+        end
+    end
+
+	each "article" get "articles" variables
+		print "<a class=\"article-preview\" href=\"/articles/article/"
+		print get "id" get "article" variables
+		print "\">"
+		print "<h3>"
+		print htmlencode get "headline" get "article" variables
+		print "</h3>"
+		print "<p>"
+		print htmlencode get "lead" get "article" variables
+		print "</p>"
+		print "<em>"
+        if not equals get "author" get "article" variables null
+            print htmlencode get "author" get "article" variables
+        end
+        if equals get "author" get "article" variables null
+            print "<span class=\"unknown-author\">"
+            print translate "unknown-author"
+            print "</span>"
+        end
+        print ", "
+		print get "date" get "article" variables
+        print "</em>"
+        print "<em>"
+            if get "visible" get "article" variables
+                print translate "published"
+            end
+            if not get "visible" get "article" variables
+                print translate "hidden"
+            end
+        print "</em>"
+		print "</a>"
+    end
+
+    include "article-navigator.html"
+}}
+{{include "bottom.html"}}

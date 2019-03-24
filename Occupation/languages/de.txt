@@ -1,0 +1,79 @@
+Betriebszeit
+Sitzungen
+Aktive Sitzungen
+Verarbeitungen pro Tag
+Bytes pro Tag
+Fehler
+Seite nicht gefunden
+Interner Server-Fehler
+Hallo
+Willkommen bei {{print get "title" variables}}.
+Artikel
+In die Zwischenablage kopieren
+In die Zwischenablage kopiert
+Senden
+Benutzername
+E-Mail Adresse
+Passwort
+Passwort wiederholen
+Registrieren
+bereits in Verwendung
+wird benötigt
+ist zu kurz
+ist zu lang
+ist zu klein
+ist zu gross
+enthält zu wenige Elemente
+enthält zu viele Elemente
+enthält ungültige Zeichen
+existiert nicht
+stimmt nicht überein
+Passwörter stimmen nicht überein
+kann nicht gelöscht werden
+Anmelden
+Abmelden
+GitHub-Profil
+Server-Statistiken
+Kontakt
+Benutzer
+Welt
+Du hast noch keinen Account? Registriere dich <a href="/signup">hier</a>.
+Du hast bereits einen Account? Melde dich <a href="/signin">hier</a> an.
+Profil
+E-Mail Adresse ändern
+Zurück
+Passwort ändern
+Du hast dein Passwort vergessen? Stelle deinen Account <a href="/recover">hier</a> wieder her.
+Du bist derzeit als {{print htmlencode get "username" variables}} angemeldet.
+Du bist neu hier? <a href="/signup">Registriere dich jetzt</a>, um mehr Funktionalitäten freizuschalten.
+Account wiederherstellen
+Es wurde eine erfolgreich eine E-Mail an die angegebene Adresse geschickt. Bitte prüfe deinen Posteingang, um deinen Account wiederherzustellen.
+Bitte klicke <a href="{{print get "url" variables}}/unlock?id={{print get "encrypted-username" variables}}&key={{print get "key" variables}}">hier</a>, um deinen Account wiederherzustellen.
+Der Account kann nicht wiederhergestellt werden, da der Link fehlerhaft ist.
+Account aktivieren
+Aktiviere deinen Account jetzt, indem du <a href="{{print get "url" variables}}/activate?id={{print get "encrypted-username" variables}}&key={{print get "key" variables}}">hier</a> klickst.
+Dein Account ist noch nicht aktiviert. Bitte überprüfe den Posteingang der E-Mail Adresse, die du angegeben hast, um deinen Account zu bestätigen.
+Dieser Link ist veraltet. Bitte suche nach einem neueren Link oder <a href="/profile/email">ändere deine E-Mail Adresse</a> um ein neues Aktivierungs-Mail zu erhalten.
+nicht aktiviert
+Account löschen
+Möchtest du diesen Account wirklich löschen? <strong>Die Löschung eines Accounts kann nicht rückgängig gemacht werden.</strong>
+Du verfügst derzeit über Administratorrechte.
+Artikel erstellen
+Artikel löschen
+Artikel publizieren
+Artikel verstecken
+Artikel bearbeiten
+Schlagzeile
+Vorspann
+Inhalt
+Kommentar verfassen
+Kommentare
+Unbekannter Autor
+Kommentar löschen
+Veröffentlicht
+Versteckt
+Neuer Artikel veröffentlicht
+{{print get "author" variables}} hat einen neuen Artikel veröffentlicht!
+Lese den ganzen Artikel <a href="{{print get "url" variables}}/articles/article/{{print get "id" variables}}">hier</a>.
+Benachrichtigungen aktivieren
+Benachrichtigungen deaktivieren
