@@ -2,30 +2,21 @@
     <h2>{{print translate "profile"}}</h2>
     <p>{{print translate "signed-in-as"}}</p>
     {{
-        if get "admin" variables
-            print "<em>"
-            print translate "admin-mode"
-            print "</em>"
-        end
-    }}
-    {{
         if not get "activated" variables
-            print "<em>"
+            print "<p>"
             print translate "account-not-activated"
-            print "</em>"
+            print "</p>"
         end
     }}
     <a class="button" href="/signout">{{print translate "signout"}}</a>
-    <a class="button" href="/profile/notifications">
-        {{
-            if get "notifications" variables
-                print translate "disable-notifications"
-            end
-            if not get "notifications" variables
-                print translate "enable-notifications"
-            end 
-        }}
-    </a>
+    <a class="button" href="/profile/notifications">{{
+        if get "notifications" variables
+            print translate "disable-notifications"
+        end
+        if not get "notifications" variables
+            print translate "enable-notifications"
+        end 
+    }}</a>
     <a class="button" href="/profile/email">{{print translate "change-email"}}</a>
     <a class="button" href="/profile/password">{{print translate "change-password"}}</a>
     <a class="button" href="/profile/delete">{{print translate "delete-account"}}</a>
