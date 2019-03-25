@@ -32,7 +32,7 @@ passwords-do-not-match
 deletion-error
 signin
 signout
-github-profile
+blog
 server-stats
 contact
 user

@@ -32,8 +32,8 @@ Passwords do not match
 can't be deleted
 Sign in
 Sign out
-GitHub Profile
-Server Statistics
+Blog
+Statistics
 Get in touch
 User
 World
@@ -45,7 +45,7 @@ Back
 Change Password
 You forgot your password? Recover your account <a href="/recover">here</a>.
 You are currently signed in as {{print htmlencode get "username" variables}}.
-You are new here? <a href="/signup">Sign up now</a> to gain access to extra features.
+You are new here? <a href="/signup">Sign up now</a> to play!
 Recover Account
 An email was sent successfully to your specified address. Please check your inbox to recover your account.
 Please click <a href="{{print get "url" variables}}/unlock?id={{print get "encrypted-username" variables}}&key={{print get "key" variables}}">here</a> to recover your account.

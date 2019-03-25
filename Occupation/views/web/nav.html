@@ -1,13 +1,15 @@
 <nav>
-	<a href="/articles">{{print translate "articles"}}</a>
 	{{
 		if equals get "username" variables null
-			print "<a href=\"/signin\">"
+			print "<a href=\"/signin\" class=\"nav-button\">"
 			print translate "signin"
 			print "</a>"
 		end
-		if not equals get "username" variables null
-			print "<a href=\"/profile\">"
+        if not equals get "username" variables null
+            print "<a href=\"/profile\" class=\"nav-button\">"
+			print translate "profile"
+			print "</a>"
+			print "<a href=\"/profile\" class=\"nav-button\">"
 			print translate "profile"
 			print "</a>"
 		end

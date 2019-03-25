@@ -32,8 +32,8 @@ Passwörter stimmen nicht überein
 kann nicht gelöscht werden
 Anmelden
 Abmelden
-GitHub-Profil
-Server-Statistiken
+Blog
+Statistiken
 Kontakt
 Benutzer
 Welt
@@ -45,7 +45,7 @@ Zurück
 Passwort ändern
 Du hast dein Passwort vergessen? Stelle deinen Account <a href="/recover">hier</a> wieder her.
 Du bist derzeit als {{print htmlencode get "username" variables}} angemeldet.
-Du bist neu hier? <a href="/signup">Registriere dich jetzt</a>, um mehr Funktionalitäten freizuschalten.
+Du bist neu hier? <a href="/signup">Registriere dich jetzt</a>, um zu spielen!
 Account wiederherstellen
 Es wurde eine erfolgreich eine E-Mail an die angegebene Adresse geschickt. Bitte prüfe deinen Posteingang, um deinen Account wiederherzustellen.
 Bitte klicke <a href="{{print get "url" variables}}/unlock?id={{print get "encrypted-username" variables}}&key={{print get "key" variables}}">hier</a>, um deinen Account wiederherzustellen.

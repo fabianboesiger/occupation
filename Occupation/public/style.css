@@ -1,11 +1,12 @@
 /* Predefined */
 
 :root{
-	--outside-color: #0f0f0f;
-	--main-color: #1f1f1f;
-    --text-color: #cfdf3f;
-    --highlighted-text-color: #7f3fdf;
-	--error-color: #C94731;
+    --black: #0f0b08;
+    --green: #8a9b3b;
+    --yellow: #ffc349;
+    --orange: #f68d4b;
+    --red: #e65735;
+    --olive: #654d21;
 
 	--max-width: 1024px;
 	--max-form-width: 512px;
@@ -24,11 +25,10 @@
 /* Structure */
 
 html{
-    background-color: var(--outside-color);
-	color: var(--text-color);    
+    background-color: var(--black);
+	color: var(--yellow);    
     font-family: PixelFont;
     font-size: 32px;
-    line-height: 24px;
 }
 
 body{
@@ -38,11 +38,13 @@ body{
 main{
 	padding-top: var(--padding);
 	padding-bottom: var(--padding);
-	background-color: var(--main-color);
+    background-color: var(--yellow);
+    color: var(--black);
 }
 
 header, footer{
-    background-color: var(--outside-color);
+    background-color: var(--black);
+    color: var(--yellow);
 }
 
 header{
@@ -50,8 +52,7 @@ header{
 }
 
 footer{
-    font-size: 16px;
-    line-height: 12px;
+    font-size: 32px;
 }
 
 main, header, footer{
@@ -71,17 +72,12 @@ main, header, footer{
 
 /* General Element Styling */
 
-
-.inline{
-	display: inline !important;
-}
-
 h1, h2{
     font-weight: normal;
 }
 
 h1{
-	font-size: 80px;
+    font-size: 64px;
 }
 
 h2{
@@ -93,31 +89,33 @@ ul{
     list-style-type: square;
 }
 
+img{
+    image-rendering: pixelated;
+}
+
+#title{
+    width: 100%;
+    max-width: 512px;
+}
+
 a{
 	text-decoration: none;
-	color: var(--text-color);
-	transition: 0.2s;
+	color: var(--yellow);
     outline: none;
 }
 
-a::before{
-    content: "[";
-}
-
-a::after{
-    content: "]";
+main a{
+    color: var(--black);
 }
 
 a:hover, a:focus{
-	background-color: transparent;
-	color: var(--highlighted-text-color);
+    color: var(--red);
 }
 
 #title{
 	display: inline-block;
 	padding: 0px;
 	background-color: transparent;
-	transition: 0.2s;
 }
 
 pre{
@@ -130,11 +128,10 @@ table{
 	width: 100%;
 	table-layout: fixed;
 	border-spacing: 0px;
-    border: 2px solid var(--text-color);
 }
 
 tr:not(:last-child) > *{
-	border-bottom: 2px solid var(--text-color);
+	border-bottom: 2px solid var(--black);
 }
 
 th, td{
@@ -155,13 +152,12 @@ form:not(.full-width){
 input, .button{
 	box-sizing: border-box;
 	width: 100%;
-    transition: 0.2s;
 }
 
 input{
 	outline: none;
 	border: none;
-	color: var(--text-color);
+	color: var(--black);
 	font-size: var(--text-size);
 	font-family: var(--text-font);
 	-webkit-appearance: none;
@@ -171,37 +167,34 @@ input{
 
 input[type=text], input[type=password], input[type=email]{
 	padding: 0px;
-	padding-top: 8px;
-	padding-bottom: 2px;
-	border-bottom: 2px solid var(--text-color);
-	background-color: transparent;
+	padding: 4px;
+	/*border: 2px solid var(--black);*/
+    background-color: var(--red);
 }
 
 input[type=text]:hover, input[type=text]:focus, input[type=password]:hover, input[type=password]:focus, input[type=email]:hover, input[type=email]:focus{
-	border-bottom: 2px solid var(--highlighted-text-color);
 }
 
 input[type=submit], .button{
 	padding: 8px;
 	text-align: center;
-	background-color: var(--text-color);
-	color: var(--main-color);
+	background-color: var(--black);
+    color: var(--red);
     text-decoration: none;
     cursor: pointer;
+    border-top: 4px solid var(--red);
 }
 
 input[type=submit]:hover, .button:hover, input[type=submit]:focus, .button:focus{
-	background-color: var(--highlighted-text-color);
-	color: var(--main-color);
 }
 
 input[type=submit]:active, input[type=submit].active, .button:active, .button.active{
-	background-color: var(--highlighted-text-color);
-	color: var(--main-color);
+    border-top: 2px solid var(--red);
+    margin-bottom: calc(var(--margin) + 2px);
 }
 
 .errors li{
-	color: var(--error-color);
+	color: var(--red);
 }
 
 .errors ul{
@@ -211,7 +204,7 @@ input[type=submit]:active, input[type=submit].active, .button:active, .button.ac
 /* Navigation */
 
 nav{
-	background-color: var(--outside-color);
+	background-color: var(--black);
 	position: -webkit-sticky;
 	position: sticky;
 	top: 0px;
@@ -228,14 +221,8 @@ nav > a{
 	margin-bottom: 16px;
 }
 
-nav > a:hover, nav > a:focus{
-	transition: 0.2s;
-	color: var(--highlighted-text-color);
-}
-
 nav > a.active, nav > a.active:hover, nav > a.active:focus{
-	transition: none;
-	color: var(--highlighted-text-color);
+	color: var(--red);
 }
 
 /* Alignment */

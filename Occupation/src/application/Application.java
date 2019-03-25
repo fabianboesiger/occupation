@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Timer;
 
 import database.Database;
 import database.Messages;
@@ -38,6 +39,9 @@ public class Application {
 		signRoutes();
 		recoveryRoutes();
 		profileRoutes();
+		
+		Timer timer = new Timer();
+		timer.schedule(new Game(), 0, 1000);
 		
 	}
 	
