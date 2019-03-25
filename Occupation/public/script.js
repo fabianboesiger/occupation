@@ -1,12 +1,12 @@
 window.addEventListener("load", function() {
 
-	// Replace Date
+    // Replace Date
 	let year = new Date().getFullYear();
 	let years = document.getElementsByClassName("year");
 	for(let i = 0; i < years.length; i++) {
 		years[i].innerHTML = year;
 	}
-
+    
 	let loaders = document.getElementsByClassName("loader");
 	for(let i = 0; i < loaders.length; i++) {
 		loadHTML(loaders[i].getAttribute("href"), loaders[i]);
