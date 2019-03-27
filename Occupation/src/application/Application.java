@@ -38,6 +38,7 @@ public class Application {
 		signRoutes();
 		recoveryRoutes();
 		profileRoutes();
+		gameRoutes();
 		
 		Game game = new Game();
 		game.start();
@@ -52,7 +53,7 @@ public class Application {
 		} else {
 			predefined.put("url", "http://127.0.0.1:8000");
 		}
-		predefined.put("email", "faelisblog@gmail.com");
+		predefined.put("email", "occupationgame@gmail.com");
 
 		server.on("ALL", ".*", (Request request) -> {
 			predefined.put("username", request.session.getUsername());
@@ -61,6 +62,18 @@ public class Application {
 		
 		server.on("GET", "/", (Request request) -> {
 			return responder.render("index.html", request.session.getLanguages());
+		});
+		
+	}
+	
+	private void gameRoutes() {
+		
+		server.on("ALL", "/game.*", (Request request) -> {
+			if(request.session.getUsername() == null) {
+				return responder.redirect("/signin");
+			} else {
+				return responder.next();
+			}
 		});
 		
 	}

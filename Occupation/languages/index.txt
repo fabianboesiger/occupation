@@ -60,3 +60,8 @@ delete-account-warning
 enable-notifications
 disable-notifications
 characters
+map
+survivors
+survivor
+about
+home

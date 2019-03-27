@@ -45,7 +45,7 @@ Back
 Change Password
 You forgot your password? Recover your account <a href="/recover">here</a>.
 You are currently signed in as {{print htmlencode get "username" variables}}.
-You are new here? <a href="/signup">Sign up now</a> to play!
+You are new? Sign up <a href="/signup">here</a> to play now!
 Recover Account
 An email was sent successfully to your specified address. Please check your inbox to recover your account.
 Please click <a href="{{print get "url" variables}}/unlock?id={{print get "encrypted-username" variables}}&key={{print get "key" variables}}">here</a> to recover your account.
@@ -60,3 +60,8 @@ Do you really want to delete your account? The deletion of an account can't be r
 Enable Notifications
 Disable Notifications
 Characters
+Map
+Survivors
+Survivor
+About
+Home

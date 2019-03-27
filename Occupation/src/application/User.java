@@ -11,7 +11,9 @@ import database.templates.StringTemplate;
 import server.Server;
 
 public class User extends ObjectTemplate {
-		
+	
+	public static final String NAME = "users";
+	
 	private IdentifiableStringTemplate username;
 	private StringTemplate password;
 	private StringTemplate email;

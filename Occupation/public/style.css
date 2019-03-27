@@ -102,14 +102,33 @@ a{
 	text-decoration: none;
 	color: var(--yellow);
     outline: none;
+    position: relative;
+}
+
+a:not([class]):not([id])::before {
+    content: "";
+    position: absolute;
+    width: calc(100% - 2px);
+    height: 2px;
+    bottom: 4px;
+    left: 0;
+    background-color: var(--yellow);
 }
 
 main a{
     color: var(--black);
 }
 
+main a:not([class]):not([id])::before {
+    background-color: var(--black);
+}
+
 a:hover, a:focus{
     color: var(--red);
+}
+
+a:not([class]):not([id]):hover::before, a:not([class]):not([id]):focus::before{
+    background-color: var(--red);
 }
 
 #title{
@@ -167,9 +186,9 @@ input{
 
 input[type=text], input[type=password], input[type=email]{
 	padding: 0px;
-	padding: 4px;
-	/*border: 2px solid var(--black);*/
-    background-color: var(--black);
+    padding: 4px;
+	border-bottom: 4px solid var(--black);
+    background-color: var(--red);
 }
 
 input[type=text]:hover, input[type=text]:focus, input[type=password]:hover, input[type=password]:focus, input[type=email]:hover, input[type=email]:focus{
@@ -221,8 +240,22 @@ nav > a{
 	margin-bottom: 16px;
 }
 
-nav > a.active, nav > a.active:hover, nav > a.active:focus{
+nav > a::before {
+    content: "";
+    position: absolute;
+    width: calc(100% - 2px);
+    height: 2px;
+    bottom: 4px;
+    left: 0;
+    background-color: var(--yellow);
+}
+
+nav > a.active{
 	color: var(--red);
+}
+
+nav > a.active::before{
+	background-color: var(--red);
 }
 
 /* Alignment */

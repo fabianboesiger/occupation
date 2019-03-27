@@ -5,6 +5,8 @@ import database.templates.ObjectTemplate;
 
 public class Player extends ObjectTemplate {
 	
+	public static final String NAME = "players";
+	
 	private ListTemplate <Character> characters;
 	
 	public Player() {
