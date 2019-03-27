@@ -169,7 +169,7 @@ input[type=text], input[type=password], input[type=email]{
 	padding: 0px;
 	padding: 4px;
 	/*border: 2px solid var(--black);*/
-    background-color: var(--red);
+    background-color: var(--black);
 }
 
 input[type=text]:hover, input[type=text]:focus, input[type=password]:hover, input[type=password]:focus, input[type=email]:hover, input[type=email]:focus{

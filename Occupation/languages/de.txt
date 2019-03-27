@@ -59,3 +59,4 @@ Account löschen
 Möchtest du diesen Account wirklich löschen? Die Löschung eines Accounts kann nicht rückgängig gemacht werden.
 Benachrichtigungen aktivieren
 Benachrichtigungen deaktivieren
+Charaktere

@@ -59,3 +59,4 @@ delete-account
 delete-account-warning
 enable-notifications
 disable-notifications
+characters
