@@ -3,7 +3,6 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Timer;
 
 import database.Database;
 import database.Messages;
@@ -40,8 +39,8 @@ public class Application {
 		recoveryRoutes();
 		profileRoutes();
 		
-		Timer timer = new Timer();
-		timer.schedule(new Game(), 0, 1000);
+		Game game = new Game();
+		game.start();
 		
 	}
 	
@@ -248,7 +247,6 @@ public class Application {
 			if((user = (User) database.load(User.class, request.session.getUsername())) != null) {
 				HashMap <String, Object> variables = new HashMap <String, Object> ();
 				variables.put("activated", user.isActivated());
-				variables.put("admin", user.isAdmin());
 				variables.put("notifications", user.notificationsEnabled());
 				return responder.render("profile/index.html", request.session.getLanguages(), variables);
 			}

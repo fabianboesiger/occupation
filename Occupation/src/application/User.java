@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import database.templates.BooleanTemplate;
 import database.templates.IdentifiableStringTemplate;
 import database.templates.ObjectTemplate;
+import database.templates.ObjectTemplateReference;
 import database.templates.StringTemplate;
 import server.Server;
 
@@ -16,8 +17,8 @@ public class User extends ObjectTemplate {
 	private StringTemplate email;
 	private BooleanTemplate activated;
 	private StringTemplate key;
-	private BooleanTemplate admin;
 	private BooleanTemplate notifications;
+	private ObjectTemplateReference <Player> player;
 	
 	public User() {
 		username = new IdentifiableStringTemplate("username", 2, 16);
@@ -29,10 +30,10 @@ public class User extends ObjectTemplate {
 		activated.set(false);
 		key = new StringTemplate("key", 64, 64);
 		key.set(Server.generateKey(64));
-		admin = new BooleanTemplate("admin");
-		admin.set(false);
 		notifications = new BooleanTemplate("notifications");
 		notifications.set(true);
+		player = new ObjectTemplateReference <Player> ("player", Player::new);
+		player.set(new Player());
 		setIdentifier(username);
 	}
 	
@@ -92,10 +93,6 @@ public class User extends ObjectTemplate {
 		return (String) key.get();
 	}
 	
-	public boolean isAdmin() {
-		return (Boolean) admin.get();
-	}
-
 	public void toggleNotifications() {
 		notifications.set(!((Boolean) notifications.get()));
 	}
