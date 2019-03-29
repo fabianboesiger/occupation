@@ -250,6 +250,10 @@ nav > a::before {
     background-color: var(--yellow);
 }
 
+a:hover::before, a:focus::before{
+    background-color: var(--red);
+}
+
 nav > a.active{
 	color: var(--red);
 }

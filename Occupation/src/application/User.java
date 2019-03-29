@@ -2,9 +2,12 @@ package application;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.LinkedList;
+import java.util.List;
 
 import database.templates.BooleanTemplate;
 import database.templates.IdentifiableStringTemplate;
+import database.templates.ListTemplate;
 import database.templates.ObjectTemplate;
 import database.templates.ObjectTemplateReference;
 import database.templates.StringTemplate;
@@ -21,6 +24,7 @@ public class User extends ObjectTemplate {
 	private StringTemplate key;
 	private BooleanTemplate notifications;
 	private ObjectTemplateReference <Player> player;
+	private ListTemplate <StringTemplate> languages;
 	
 	public User() {
 		username = new IdentifiableStringTemplate("username", 2, 16);
@@ -36,6 +40,10 @@ public class User extends ObjectTemplate {
 		notifications.set(true);
 		player = new ObjectTemplateReference <Player> ("player", Player::new);
 		player.set(new Player());
+		languages = new ListTemplate <StringTemplate> ("languages", StringTemplate::new);
+		StringTemplate defaultLanguage = new StringTemplate();
+		defaultLanguage.set("en");
+		languages.add(defaultLanguage);
 		setIdentifier(username);
 	}
 	
@@ -103,6 +111,21 @@ public class User extends ObjectTemplate {
 		return (Boolean) notifications.get();
 	}
 	
-	
+	public void setLanguages(List <String> languages) {
+		this.languages.clear();
+		for(String language : languages) {
+			StringTemplate stringTemplate = new StringTemplate();
+			stringTemplate.set(language);
+			this.languages.add(stringTemplate);
+		}
+	}
+
+	public List<String> getLanguages() {
+		LinkedList <String> languages = new LinkedList <String> ();
+		for(StringTemplate language : this.languages) {
+			languages.add((String) language.get());
+		}
+		return languages;
+	}
 
 }

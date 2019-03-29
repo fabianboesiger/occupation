@@ -76,6 +76,10 @@ public class Application {
 			}
 		});
 		
+		server.on("GET", "/game/map", (Request request) -> {
+			return responder.render("game/map.html", request.session.getLanguages());
+		});
+		
 	}
 	
 	private void serverRoutes() {
@@ -140,6 +144,8 @@ public class Application {
 			
 			if((user = (User) database.load(User.class, request.parameters.get("username"))) != null) {
 				if(user.authenticate(request.parameters.get("password"))) {
+					user.setLanguages(request.session.getLanguages());
+					database.update(user);
 					request.session.login(user.getUsername());
 					return responder.redirect("/");
 				} else {
@@ -162,6 +168,7 @@ public class Application {
 		server.on("POST", "/signup", (Request request) -> {
 			User user = new User();
 			user.parseFromParameters(request.parameters);
+			user.setLanguages(request.session.getLanguages());
 
 			Messages messages = new Messages();
 			
@@ -169,7 +176,7 @@ public class Application {
 				if(database.save(user)) {
 					request.session.login(user.getUsername());
 					
-					sendActivationMail(user, request);
+					sendActivationMail(user);
 					
 					return responder.redirect("/");
 				} else {
@@ -215,7 +222,7 @@ public class Application {
 			
 			if((user = (User) database.load(User.class, request.parameters.get("username"))) != null) {
 				if(user.isActivated()) {
-					sendRecoverMail(user, request);
+					sendRecoverMail(user);
 					return responder.redirect("/recover/confirm");
 				} else {
 					messages.add("user", "not-activated");
@@ -280,7 +287,7 @@ public class Application {
 				user.setActivated(false);
 				if(user.validate(messages)) {
 					if(database.update(user)) {
-						sendActivationMail(user, request);
+						sendActivationMail(user);
 						return responder.redirect("/profile");
 					}
 				}
@@ -351,20 +358,20 @@ public class Application {
 		
 	}
 
-	private void sendActivationMail(User user, Request request) {
+	private void sendActivationMail(User user) {
 		HashMap <String, Object> variables = new HashMap <String, Object> ();
 		variables.put("username", user.getUsername());
 		variables.put("encrypted-username", Database.encrypt(user.getUsername()));
 		variables.put("key", user.getKey());
-		mailer.send(user.getMail(), "{{print translate \"activate-account\"}}", "activate.html", request.session.getLanguages(), variables);
+		mailer.send(user.getMail(), "{{print translate \"activate-account\"}}", "activate.html", user.getLanguages(), variables);
 	}
 	
-	private void sendRecoverMail(User user, Request request) {
+	private void sendRecoverMail(User user) {
 		HashMap <String, Object> variables = new HashMap <String, Object> ();
 		variables.put("username", user.getUsername());
 		variables.put("encrypted-username", Database.encrypt(user.getUsername()));
 		variables.put("key", user.getKey());
-		mailer.send(user.getMail(), "{{print translate \"recover-account\"}}", "recover.html", request.session.getLanguages(), variables);
+		mailer.send(user.getMail(), "{{print translate \"recover-account\"}}", "recover.html", user.getLanguages(), variables);
 	}
 
 	private void addMessagesFlashToVariables(Request request, String name, HashMap <String, Object> variables) {
