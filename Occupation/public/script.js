@@ -12,7 +12,7 @@ window.addEventListener("load", function() {
 		loadHTML(loaders[i].getAttribute("href"), loaders[i]);
 		setInterval(function() {
 			loadHTML(loaders[i].getAttribute("href"), loaders[i]);
-		}, 1000);
+		}, 10000);
 	}
 
 	// Set Navigation

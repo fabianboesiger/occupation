@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import database.templates.BooleanTemplate;
 import database.templates.IdentifiableStringTemplate;
@@ -11,11 +12,12 @@ import database.templates.ListTemplate;
 import database.templates.ObjectTemplate;
 import database.templates.ObjectTemplateReference;
 import database.templates.StringTemplate;
-import server.Server;
 
 public class User extends ObjectTemplate {
 	
 	public static final String NAME = "users";
+	
+	public static Random random = new Random();
 	
 	private IdentifiableStringTemplate username;
 	private StringTemplate password;
@@ -35,7 +37,7 @@ public class User extends ObjectTemplate {
 		activated = new BooleanTemplate("activated");
 		activated.set(false);
 		key = new StringTemplate("key", 64, 64);
-		key.set(Server.generateKey(64));
+		key.set(generateKey(64));
 		notifications = new BooleanTemplate("notifications");
 		notifications.set(true);
 		player = new ObjectTemplateReference <Player> ("player", Player::new);
@@ -84,7 +86,7 @@ public class User extends ObjectTemplate {
 
 	public void setMail(String value) {
 		email.set(value);
-		key.set(Server.generateKey(64));
+		key.set(generateKey(64));
 	}
 
 	public void setPassword(String value) {
@@ -127,5 +129,20 @@ public class User extends ObjectTemplate {
 		}
 		return languages;
 	}
+	
+	public static String generateKey(int length) {
+    	String output = "";
+    	for(int i = 0; i < length; i++) {
+    		int r = random.nextInt(26*2+10)+48;
+    		if(r > 57) {
+    			r += 7;
+    		}
+    		if(r > 90) {
+    			r += 6;
+    		}
+    		output += (char) r;
+    	}
+    	return output;
+    }
 
 }

@@ -29,6 +29,7 @@ html{
 	color: var(--yellow);    
     font-family: PixelFont;
     font-size: 32px;
+    text-rendering: optimizeSpeed !important;
 }
 
 body{
@@ -62,7 +63,7 @@ main, header, footer{
 	padding-right: var(--padding);
 }
 
-.centered > *:not(script), .content > *, form > *, .article-preview > *, .article > *, .comment > *, .markdown > *{
+.centered > *:not(script), form > *:not(script){
 	display: block;
 	box-sizing: border-box;
 	width: 100%;

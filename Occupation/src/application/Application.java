@@ -7,8 +7,9 @@ import java.util.HashMap;
 import database.Database;
 import database.Messages;
 import mailer.Mailer;
+import manager.DatabaseSessionManager;
+import responder.RenderResponder;
 import server.Request;
-import server.Responder;
 import server.Server;
 
 public class Application {
@@ -16,7 +17,7 @@ public class Application {
 	private static final boolean PRODUCTION = false;
 	
 	private Database database;
-	private Responder responder;
+	private RenderResponder responder;
 	private Mailer mailer;
 	private Server server;
 	
@@ -25,9 +26,9 @@ public class Application {
 	
 	public Application() throws IOException {		
 		database = new Database();
-		responder = new Responder(predefined, new File("views/web"));
+		responder = new RenderResponder(predefined, new File("views/web"));
 		mailer = new Mailer(predefined, new File("views/mail"));
-		server = new Server(responder, 8000);
+		server = new Server(8000, new File("public"), responder, new DatabaseSessionManager <User> (database, 7 * 24 * 60 * 60, User::new));
 		setup();
 	}
 	
@@ -56,12 +57,17 @@ public class Application {
 		predefined.put("email", "occupationgame@gmail.com");
 
 		server.on("ALL", ".*", (Request request) -> {
-			predefined.put("username", request.session.getUsername());
+			User user = (User) request.session.load();
+			if(user == null) {
+				predefined.put("username", null);
+			} else {
+				predefined.put("username", user.getUsername());
+			}
 			return responder.next();
 		});
 		
 		server.on("GET", "/", (Request request) -> {
-			return responder.render("index.html", request.session.getLanguages());
+			return responder.render("index.html", request.languages);
 		});
 		
 	}
@@ -69,15 +75,18 @@ public class Application {
 	private void gameRoutes() {
 		
 		server.on("ALL", "/game.*", (Request request) -> {
-			if(request.session.getUsername() == null) {
+			if(request.session.load() == null) {
 				return responder.redirect("/signin");
 			} else {
 				return responder.next();
 			}
 		});
-		
 		server.on("GET", "/game/map", (Request request) -> {
-			return responder.render("game/map.html", request.session.getLanguages());
+			User user = (User) request.session.load();
+			if(user != null) {
+				return responder.render("game/map.html", request.languages);
+			}
+			return responder.redirect("/signin");
 		});
 		
 	}
@@ -85,7 +94,7 @@ public class Application {
 	private void serverRoutes() {
 		
 		server.on("GET", "/server", (Request request) -> {
-			return responder.render("server.html", request.session.getLanguages());
+			return responder.render("server.html", request.languages);
 		});
 		
 		server.on("GET", "/stats", (Request request) -> {
@@ -125,7 +134,7 @@ public class Application {
 			
 			variables.put("bytes-per-day", "" + formatted);
 			
-			return responder.render("stats.html", request.session.getLanguages(), variables);
+			return responder.render("stats.html", request.languages, variables);
 		});
 		
 	}
@@ -135,7 +144,7 @@ public class Application {
 		server.on("GET", "/signin", (Request request) -> {
 			HashMap <String, Object> variables = new HashMap <String, Object> ();
 			addMessagesFlashToVariables(request, "errors", variables);
-			return responder.render("signin.html", request.session.getLanguages(), variables);
+			return responder.render("signin.html", request.languages, variables);
 		});
 		
 		server.on("POST", "/signin", (Request request) -> {
@@ -144,9 +153,9 @@ public class Application {
 			
 			if((user = (User) database.load(User.class, request.parameters.get("username"))) != null) {
 				if(user.authenticate(request.parameters.get("password"))) {
-					user.setLanguages(request.session.getLanguages());
+					user.setLanguages(request.languages);
 					database.update(user);
-					request.session.login(user.getUsername());
+					request.session.save(user);
 					return responder.redirect("/");
 				} else {
 					messages.add("password", "does-not-match");
@@ -162,19 +171,19 @@ public class Application {
 		server.on("GET", "/signup", (Request request) -> {
 			HashMap <String, Object> variables = new HashMap <String, Object> ();
 			addMessagesFlashToVariables(request, "errors", variables);
-			return responder.render("signup.html", request.session.getLanguages(), variables);
+			return responder.render("signup.html", request.languages, variables);
 		});
 		
 		server.on("POST", "/signup", (Request request) -> {
 			User user = new User();
 			user.parseFromParameters(request.parameters);
-			user.setLanguages(request.session.getLanguages());
+			user.setLanguages(request.languages);
 
 			Messages messages = new Messages();
 			
 			if(user.validate(messages)) {
 				if(database.save(user)) {
-					request.session.login(user.getUsername());
+					request.session.save(user);
 					
 					sendActivationMail(user);
 					
@@ -189,7 +198,7 @@ public class Application {
 		});
 		
 		server.on("GET", "/signout", (Request request) -> {
-			request.session.logout();
+			request.session.delete();
 			return responder.redirect("/");
 		});
 		
@@ -201,25 +210,24 @@ public class Application {
 			User user = null;
 			if((user = (User) database.loadId(User.class, request.parameters.get("id"))) != null) {
 				if(user.getKey().equals(request.parameters.get("key"))) {
-					request.session.login(user.getUsername());
+					request.session.save(user);
 					user.setActivated(true);
 					database.update(user);
 					return responder.redirect("/profile");
 				}
 			}
-			return responder.render("recover/activate.html", request.session.getLanguages());
+			return responder.render("recover/activate.html", request.languages);
 		});
 		
 		server.on("GET", "/recover", (Request request) -> {
 			HashMap <String, Object> variables = new HashMap <String, Object> ();
 			addMessagesFlashToVariables(request, "errors", variables);
-			return responder.render("recover/index.html", request.session.getLanguages(), variables);
+			return responder.render("recover/index.html", request.languages, variables);
 		});
 		
 		server.on("POST", "/recover", (Request request) -> {
 			Messages messages = new Messages();
 			User user = null;
-			
 			if((user = (User) database.load(User.class, request.parameters.get("username"))) != null) {
 				if(user.isActivated()) {
 					sendRecoverMail(user);
@@ -236,18 +244,18 @@ public class Application {
 		});
 		
 		server.on("GET", "/recover/confirm", (Request request) -> {
-			return responder.render("recover/confirm.html", request.session.getLanguages());
+			return responder.render("recover/confirm.html", request.languages);
 		});
 		
 		server.on("GET", "/unlock", (Request request) -> {	
 			User user = null;
 			if((user = (User) database.loadId(User.class, request.parameters.get("id"))) != null) {
 				if(user.getKey().equals(request.parameters.get("key"))) {
-					request.session.login(user.getUsername());
+					request.session.save(user);
 					return responder.redirect("/profile/password");
 				}
 			}
-			return responder.render("recover/unlock.html", request.session.getLanguages());
+			return responder.render("recover/unlock.html", request.languages);
 		});
 		
 	}
@@ -255,7 +263,7 @@ public class Application {
 	private void profileRoutes() {
 		
 		server.on("ALL", "/profile.*", (Request request) -> {
-			if(request.session.getUsername() == null) {
+			if(request.session.load() == null) {
 				return responder.redirect("/signin");
 			} else {
 				return responder.next();
@@ -263,12 +271,12 @@ public class Application {
 		});
 		
 		server.on("GET", "/profile", (Request request) -> {
-			User user = null;
-			if((user = (User) database.load(User.class, request.session.getUsername())) != null) {
+			User user = (User) request.session.load();
+			if(user != null) {
 				HashMap <String, Object> variables = new HashMap <String, Object> ();
 				variables.put("activated", user.isActivated());
 				variables.put("notifications", user.notificationsEnabled());
-				return responder.render("profile/index.html", request.session.getLanguages(), variables);
+				return responder.render("profile/index.html", request.languages, variables);
 			}
 			return responder.redirect("/signin");
 		});
@@ -276,13 +284,13 @@ public class Application {
 		server.on("GET", "/profile/email", (Request request) -> {
 			HashMap <String, Object> variables = new HashMap <String, Object> ();
 			addMessagesFlashToVariables(request, "errors", variables);
-			return responder.render("profile/email.html", request.session.getLanguages(), variables);
+			return responder.render("profile/email.html", request.languages, variables);
 		});
 		
 		server.on("POST", "/profile/email", (Request request) -> {
 			Messages messages = new Messages();
-			User user = null;
-			if((user = (User) database.load(User.class, request.session.getUsername())) != null) {
+			User user = (User) request.session.load();
+			if(user != null) {
 				user.setMail(request.parameters.get("email"));
 				user.setActivated(false);
 				if(user.validate(messages)) {
@@ -302,13 +310,13 @@ public class Application {
 		server.on("GET", "/profile/password", (Request request) -> {
 			HashMap <String, Object> variables = new HashMap <String, Object> ();
 			addMessagesFlashToVariables(request, "errors", variables);
-			return responder.render("profile/password.html", request.session.getLanguages(), variables);
+			return responder.render("profile/password.html", request.languages, variables);
 		});
 		
 		server.on("POST", "/profile/password", (Request request) -> {
 			Messages messages = new Messages();
-			User user = null;
-			if((user = (User) database.load(User.class, request.session.getUsername())) != null) {
+			User user = (User) request.session.load();
+			if(user != null) {
 				user.setPassword(request.parameters.get("password"));
 				if(user.validate(messages)) {
 					if(database.update(user)) {
@@ -324,8 +332,8 @@ public class Application {
 		});
 		
 		server.on("GET", "/profile/notifications", (Request request) -> {
-			User user = null;
-			if((user = (User) database.load(User.class, request.session.getUsername())) != null) {
+			User user = (User) request.session.load();
+			if(user != null) {
 				user.toggleNotifications();
 				if(user.validate()) {
 					database.update(user);
@@ -340,13 +348,13 @@ public class Application {
 		server.on("GET", "/profile/delete", (Request request) -> {
 			HashMap <String, Object> variables = new HashMap <String, Object> ();
 			addMessagesFlashToVariables(request, "errors", variables);
-			return responder.render("profile/delete.html", request.session.getLanguages(), variables);
+			return responder.render("profile/delete.html", request.languages, variables);
 		});
 		
 		server.on("GET", "/profile/delete/confirm", (Request request) -> {
-			if(((User) database.load(User.class, request.session.getUsername())) != null) {
-				if(database.delete(User.class, request.session.getUsername())) {
-					request.session.logout();
+			if(request.session.load() != null) {
+				if(database.delete(User.class, ((String) request.session.load()))) {
+					request.session.delete();
 					return responder.redirect("/");
 				}
 			}
@@ -357,7 +365,7 @@ public class Application {
 		});
 		
 	}
-
+	
 	private void sendActivationMail(User user) {
 		HashMap <String, Object> variables = new HashMap <String, Object> ();
 		variables.put("username", user.getUsername());
