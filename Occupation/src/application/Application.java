@@ -185,7 +185,7 @@ public class Application {
 					
 					sendActivationMail(user);
 					
-					return responder.redirect("/");
+					return responder.redirect("/"); 
 				} else {
 					validator.addMessage("username", "in-use");
 				}
