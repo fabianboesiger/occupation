@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import database.Database;
-import database.Messages;
+import database.validator.Validator;
 import mailer.Mailer;
 import manager.DatabaseSessionManager;
 import responder.RenderResponder;
@@ -148,9 +148,8 @@ public class Application {
 		});
 		
 		server.on("POST", "/signin", (Request request) -> {
-			Messages messages = new Messages();
+			Validator validator = new Validator("errors");
 			User user = null;
-			
 			if((user = (User) database.load(User.class, request.parameters.get("username"))) != null) {
 				if(user.authenticate(request.parameters.get("password"))) {
 					user.setLanguages(request.languages);
@@ -158,13 +157,12 @@ public class Application {
 					request.session.save(user);
 					return responder.redirect("/");
 				} else {
-					messages.add("password", "does-not-match");
+					validator.addMessage("password", "does-not-match");
 				}
 			} else {
-				messages.add("user", "does-not-exist");
+				validator.addMessage("user", "does-not-exist");
 			}
-			
-			request.session.addFlash("errors", messages);
+			request.session.addFlash(validator);
 			return responder.redirect("/signin");
 		});
 		
@@ -179,9 +177,9 @@ public class Application {
 			user.parseFromParameters(request.parameters);
 			user.setLanguages(request.languages);
 
-			Messages messages = new Messages();
+			Validator validator = new Validator("errors");
 			
-			if(user.validate(messages)) {
+			if(user.validate(validator)) {
 				if(database.save(user)) {
 					request.session.save(user);
 					
@@ -189,11 +187,11 @@ public class Application {
 					
 					return responder.redirect("/");
 				} else {
-					messages.add("username", "in-use");
+					validator.addMessage("username", "in-use");
 				}
 			}
 
-			request.session.addFlash("errors", messages);
+			request.session.addFlash(validator);
 			return responder.redirect("/signup");
 		});
 		
@@ -226,20 +224,20 @@ public class Application {
 		});
 		
 		server.on("POST", "/recover", (Request request) -> {
-			Messages messages = new Messages();
+			Validator validator = new Validator("errors");
 			User user = null;
 			if((user = (User) database.load(User.class, request.parameters.get("username"))) != null) {
 				if(user.isActivated()) {
 					sendRecoverMail(user);
 					return responder.redirect("/recover/confirm");
 				} else {
-					messages.add("user", "not-activated");
+					validator.addMessage("user", "not-activated");
 				}
 			} else {
-				messages.add("user", "does-not-exist");
+				validator.addMessage("user", "does-not-exist");
 			}
 			
-			request.session.addFlash("errors", messages);
+			request.session.addFlash(validator);
 			return responder.redirect("/recover");
 		});
 		
@@ -288,22 +286,22 @@ public class Application {
 		});
 		
 		server.on("POST", "/profile/email", (Request request) -> {
-			Messages messages = new Messages();
+			Validator validator = new Validator("errors");
 			User user = (User) request.session.load();
 			if(user != null) {
 				user.setMail(request.parameters.get("email"));
 				user.setActivated(false);
-				if(user.validate(messages)) {
+				if(user.validate(validator)) {
 					if(database.update(user)) {
 						sendActivationMail(user);
 						return responder.redirect("/profile");
 					}
 				}
 			} else {
-				messages.add("user", "does-not-exist");
+				validator.addMessage("user", "does-not-exist");
 			}
 			
-			request.session.addFlash("errors", messages);
+			request.session.addFlash(validator);
 			return responder.redirect("/profile/email");
 		});
 		
@@ -314,20 +312,20 @@ public class Application {
 		});
 		
 		server.on("POST", "/profile/password", (Request request) -> {
-			Messages messages = new Messages();
+			Validator validator = new Validator("errors");
 			User user = (User) request.session.load();
 			if(user != null) {
 				user.setPassword(request.parameters.get("password"));
-				if(user.validate(messages)) {
+				if(user.validate(validator)) {
 					if(database.update(user)) {
 						return responder.redirect("/profile");
 					}
 				}
 			} else {
-				messages.add("user", "does-not-exist");
+				validator.addMessage("user", "does-not-exist");
 			}
 			
-			request.session.addFlash("errors", messages);
+			request.session.addFlash(validator);
 			return responder.redirect("/profile/password");
 		});
 		
@@ -358,9 +356,9 @@ public class Application {
 					return responder.redirect("/");
 				}
 			}
-			Messages messages = new Messages();
-			messages.add("user", "deletion-error");
-			request.session.addFlash("errors", messages);
+			Validator validator = new Validator("errors");
+			validator.addMessage("user", "deletion-error");
+			request.session.addFlash(validator);
 			return responder.redirect("/profile/delete");
 		});
 		
@@ -383,9 +381,9 @@ public class Application {
 	}
 
 	private void addMessagesFlashToVariables(Request request, String name, HashMap <String, Object> variables) {
-		Messages messages = (Messages) request.session.getFlash(name);
-		if(messages != null) {
-			messages.addToVariables(variables, name);
+		Validator validator = (Validator) request.session.getFlash(name);
+		if(validator != null) {
+			validator.addToVariables(variables);
 		}
 	}
 	
