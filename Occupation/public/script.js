@@ -7,6 +7,7 @@ window.addEventListener("load", function() {
 		years[i].innerHTML = year;
 	}
     
+    // HTML Loader
 	let loaders = document.getElementsByClassName("loader");
 	for(let i = 0; i < loaders.length; i++) {
 		loadHTML(loaders[i].getAttribute("href"), loaders[i]);
@@ -22,8 +23,23 @@ window.addEventListener("load", function() {
 		if(button.href === window.location.href) {
 			button.classList.add("active");
 		}
-	}
-
+    }
+    
+    // Image Animator
+    let frame = [];
+    let animations = document.getElementsByClassName("animation");
+	for(let i = 0; i < animations.length; i++) {
+        frame[i] = 0;
+		animations[i].setAttribute("src", animations[i].getAttribute("path") + "/" + frame[i] + ".png");
+		setInterval(function() {
+            frame[i]++;
+            if(frame[i] >= animations[i].getAttribute("frames")) {
+                frame[i] = 0;
+            }
+            animations[i].setAttribute("src", animations[i].getAttribute("path") + "/" + frame[i] + ".png");
+		}, 500);
+    }
+    
 });
 
 // Loader

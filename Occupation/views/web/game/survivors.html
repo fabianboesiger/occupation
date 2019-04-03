@@ -1,8 +1,13 @@
 {{include "top.html"}}
 	<h2>{{print translate "survivors"}}</h2>
 	{{
-		each "character" get "characters" variables
-			print get 
+        each "character" get "characters" variables
+            print "<div class=\"survivor block\">"
+            print "<h3>"
+            print get "name" get "character" variables
+            print "</h3>"
+            print "<img class=\"animation\" path=\"/media/images/creatures/humans/bodies/0\" frames=\"2\"></img>"
+            print "</div>"
 		end
 	}}
 {{include "bottom.html"}}
