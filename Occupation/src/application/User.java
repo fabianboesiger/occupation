@@ -144,5 +144,14 @@ public class User extends ObjectTemplate {
     	}
     	return output;
     }
+	
+	@Override
+	public String toString() {
+		return "[" + id + "]" + username.get() + ": " + player.toString();	
+	}
+	
+	public Player getPlayer() {
+		return (Player) player.get();
+	}
 
 }

@@ -1,0 +1,8 @@
+{{include "top.html"}}
+	<h2>{{print translate "survivors"}}</h2>
+	{{
+		each "character" get "characters" variables
+			print get 
+		end
+	}}
+{{include "bottom.html"}}

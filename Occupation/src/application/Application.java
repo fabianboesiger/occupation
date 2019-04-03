@@ -81,10 +81,24 @@ public class Application {
 				return responder.next();
 			}
 		});
+		
 		server.on("GET", "/game/map", (Request request) -> {
 			User user = (User) request.session.load();
 			if(user != null) {
 				return responder.render("game/map.html", request.languages);
+			}
+			return responder.redirect("/signin");
+		});
+		
+		server.on("GET", "/game/survivors", (Request request) -> {
+			User user = (User) request.session.load();
+			if(user != null) {
+				Player player = user.getPlayer();
+				
+				HashMap <String, Object> variables = new HashMap <String, Object> ();
+				variables.put("characters", player.getCharacters());
+				
+				return responder.render("game/survivors.html", request.languages, variables);
 			}
 			return responder.redirect("/signin");
 		});
