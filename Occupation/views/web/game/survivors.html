@@ -1,5 +1,6 @@
 {{include "top.html"}}
-	<h2>{{print translate "survivors"}}</h2>
+    <h2>{{print translate "survivors"}}</h2>
+    <div>
 	{{
         each "character" get "characters" variables
             print "<div class=\"survivor block\">"
@@ -9,5 +10,6 @@
             print "<img class=\"animation\" path=\"/media/images/creatures/humans/bodies/0\" frames=\"2\"></img>"
             print "</div>"
 		end
-	}}
+    }}
+    </div>
 {{include "bottom.html"}}
