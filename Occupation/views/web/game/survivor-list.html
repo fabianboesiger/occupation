@@ -1,0 +1,164 @@
+<table class="list">
+{{
+    each "character" get "characters" variables
+
+        print "<tr class=\"survivor\">"
+
+        print "<td>"  
+        print "<img class=\"portrait animation\" path=\"/media/images/creatures/humans/bodies/0\" frames=\"2\"></img>"
+        print "<div class=\"healthbar\" value=\""
+        print get "health" get "character" variables
+        print "\" icon=\"/media/images/icons/health.png\"></div>"
+        print "<div class=\"healthbar\" value=\""
+        print get "hunger" get "character" variables
+        print "\" icon=\"/media/images/icons/hunger.png\"></div>"
+        print "<div class=\"healthbar\" value=\""
+        print get "fatigue" get "character" variables
+        print "\" icon=\"/media/images/icons/fatigue.png\"></div>"
+        print "</td>"
+
+
+
+        print "<td>"
+        print "<h2>"
+        print get "name" get "character" variables
+        print "</h2>"
+        print "<table class=\"low-key\">"
+
+        print "<tr><th>"
+        print translate "strength"
+        print "</th><td>"
+        print get "strength" get "character" variables
+        print "</td></tr>"
+
+        print "<tr><th>"
+        print translate "endurance"
+        print "</th><td>"
+        print get "endurance" get "character" variables
+        print "</td></tr>"
+
+        print "<tr><th>"
+        print translate "dexterity"
+        print "</th><td>"
+        print get "dexterity" get "character" variables
+        print "</td></tr>"
+
+        print "<tr><th>"
+        print translate "focus"
+        print "</th><td>"
+        print get "focus" get "character" variables
+        print "</td></tr>"
+
+        print "<tr><th>"
+        print translate "intelligence"
+        print "</th><td>"
+        print get "intelligence" get "character" variables
+        print "</td></tr>" 
+
+        print "</table>"
+        print "</td>"
+
+
+
+        print "<td>"
+        print "<h2>"
+        print "Ausrüstung"
+        print "</h2>"
+        print "<table class=\"low-key\">"
+
+        print "<tr><th>"
+        print translate "head"
+        print "</th><td>"
+        print get "strength" get "character" variables
+        print "</td></tr>"
+
+        print "<tr><th>"
+        print translate "torso"
+        print "</th><td>"
+        print get "endurance" get "character" variables
+        print "</td></tr>"
+
+        print "<tr><th>"
+        print translate "tool"
+        print "</th><td>"
+        print get "dexterity" get "character" variables
+        print "</td></tr>"
+
+        print "<tr><th>"
+        print translate "legs"
+        print "</th><td>"
+        print get "focus" get "character" variables
+        print "</td></tr>"
+
+        print "<tr><th>"
+        print translate "feet"
+        print "</th><td>"
+        print get "intelligence" get "character" variables
+        print "</td></tr>" 
+
+        print "</table>"
+        print "</td>"
+
+
+
+        print "<td><h2>"
+        print translate "activity"
+        print "</h2><form class=\"low-key automated\" action=\"/game/survivors/"
+        print get "id" get "character" variables
+        print "\" method=\"POST\">"
+        print "<table class=\"low-key\">"
+
+        print "<tr>"
+        print "<th><label for=\"activity-none\">"
+        print translate "none"
+        print "</label></th><td><input type=\"radio\" name=\"activity\" value=\"0\" id=\"activity-none\""
+        if equals get "activity" get "character" variables 0
+            print "checked=\"checked\""
+        end
+        print "></td>"
+        print "</tr>"
+
+        print "<tr>"
+        print "<th><label for=\"activity-looter\">"
+        print translate "looter"
+        print "</label></th><td><input type=\"radio\" name=\"activity\" value=\"1\" id=\"activity-looter\""
+        if equals get "activity" get "character" variables 1
+            print "checked=\"checked\""
+        end
+        print "></td>"
+        print "</tr>"
+
+        print "<tr>"
+        print "<th><label for=\"activity-looter\">"
+        print "</label></th><td><input type=\"radio\" name=\"activity\" value=\"1\" id=\"activity-looter\""
+        if equals get "activity" get "character" variables 1
+            print "checked=\"checked\""
+        end
+        print "></td>"
+        print "</tr>"
+
+        print "<tr>"
+        print "<th><label for=\"activity-looter\">"
+        print "</label></th><td><input type=\"radio\" name=\"activity\" value=\"1\" id=\"activity-looter\""
+        if equals get "activity" get "character" variables 1
+            print "checked=\"checked\""
+        end
+        print "></td>"
+        print "</tr>"
+        
+        print "<tr>"
+        print "<th><label for=\"activity-looter\">"
+        print "</label></th><td><input type=\"radio\" name=\"activity\" value=\"1\" id=\"activity-looter\""
+        if equals get "activity" get "character" variables 1
+            print "checked=\"checked\""
+        end
+        print "></td>"
+        print "</tr>"
+
+        print "</table>"
+        print "</form></td>"
+
+        print "</tr>"
+    end
+}}
+</table>

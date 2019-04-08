@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import database.templates.BooleanTemplate;
+import database.templates.DoubleTemplate;
 import database.templates.IdentifiableStringTemplate;
 import database.templates.ListTemplate;
 import database.templates.ObjectTemplate;
@@ -27,6 +28,7 @@ public class User extends ObjectTemplate {
 	private BooleanTemplate notifications;
 	private ObjectTemplateReference <Player> player;
 	private ListTemplate <StringTemplate> languages;
+	private DoubleTemplate miningPerformance;
 	
 	public User() {
 		username = new IdentifiableStringTemplate("username", 2, 16);
@@ -46,6 +48,8 @@ public class User extends ObjectTemplate {
 		StringTemplate defaultLanguage = new StringTemplate();
 		defaultLanguage.set("en");
 		languages.add(defaultLanguage);
+		miningPerformance = new DoubleTemplate("mining", 0, 100);
+		miningPerformance.set(0.0);
 		setIdentifier(username);
 	}
 	
@@ -99,6 +103,14 @@ public class User extends ObjectTemplate {
 	
 	public void setActivated(boolean value) {
 		activated.set(value);
+	}
+	
+	public boolean keyEquals(String key) {
+		boolean output = key.equals((String) this.key.get());
+		if(output) {
+			this.key.set(generateKey(64));
+		}
+		return output;
 	}
 
 	public String getKey() {
@@ -154,4 +166,12 @@ public class User extends ObjectTemplate {
 		return (Player) player.get();
 	}
 
+	public double getMiningPerformance() {
+		return (double) miningPerformance.get();
+	}
+	
+	public void setMiningPerformance(double value) {
+		miningPerformance.set(value);
+	}
+	
 }

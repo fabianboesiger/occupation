@@ -1,14 +1,22 @@
 package application;
 
+import java.util.LinkedList;
+
+import database.Database;
+import database.templates.ObjectTemplate;
+
 public class Game extends Thread {
 	
-	private static final int LOOP_TIME = 1000;
+	private static final int LOOP_TIME = 5000;
+	private static final int MULTIPLIER = 1;
 	private boolean paused;
 	private long nextLoop;
+	private Database database;
 	
-	public Game() {
+	public Game(Database database) {
 		nextLoop =  System.currentTimeMillis();
 		paused = false;
+		this.database = database;
 	}
 	
 	@Override
@@ -27,6 +35,12 @@ public class Game extends Thread {
 	}
 	
 	public void loop() {
+		LinkedList <ObjectTemplate> users = database.loadAll(User.class);
+		for(ObjectTemplate object : users) {
+			Player player = ((User) object).getPlayer();
+			player.update(MULTIPLIER);
+			database.update(player);
+		}
 	}
 
 }

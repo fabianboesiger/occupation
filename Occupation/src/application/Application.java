@@ -29,10 +29,14 @@ public class Application {
 		responder = new RenderResponder(predefined, new File("views/web"));
 		mailer = new Mailer(predefined, new File("views/mail"));
 		server = new Server(8000, new File("public"), responder, new DatabaseSessionManager <User> (database, 7 * 24 * 60 * 60, User::new));
-		setup();
+		
+		Game game = new Game(database);
+		game.start();
+		
+		routes();
 	}
 	
-	private void setup() throws IOException {
+	private void routes() throws IOException {
 		
 		indexRoutes();
 		serverRoutes();
@@ -40,9 +44,6 @@ public class Application {
 		recoveryRoutes();
 		profileRoutes();
 		gameRoutes();
-		
-		Game game = new Game();
-		game.start();
 		
 	}
 	
@@ -60,8 +61,12 @@ public class Application {
 			User user = (User) request.session.load();
 			if(user == null) {
 				predefined.put("username", null);
+				predefined.put("mining", 0);
+				predefined.put("throttle", 100);
 			} else {
 				predefined.put("username", user.getUsername());
+				predefined.put("mining", user.getMiningPerformance());
+				predefined.put("throttle", 100 - user.getMiningPerformance());
 			}
 			return responder.next();
 		});
@@ -90,17 +95,56 @@ public class Application {
 			return responder.redirect("/signin");
 		});
 		
+		server.on("GET", "/game/inventory", (Request request) -> {
+			User user = (User) request.session.load();
+			if(user != null) {
+				return responder.render("game/inventory.html", request.languages);
+			}
+			return responder.redirect("/signin");
+		});
+		
 		server.on("GET", "/game/survivors", (Request request) -> {
 			User user = (User) request.session.load();
 			if(user != null) {
 				Player player = user.getPlayer();
 				
 				HashMap <String, Object> variables = new HashMap <String, Object> ();
-				variables.put("characters", player.getCharacters());
+				variables.put("characters", player.getCharacterList());
 				
 				return responder.render("game/survivors.html", request.languages, variables);
 			}
 			return responder.redirect("/signin");
+		});
+		
+		server.on("GET", "/game/survivor-list", (Request request) -> {
+			User user = (User) request.session.load();
+			if(user != null) {
+				Player player = user.getPlayer();
+				
+				HashMap <String, Object> variables = new HashMap <String, Object> ();
+				variables.put("characters", player.getCharacterList());
+				
+				return responder.render("game/survivor-list.html", request.languages, variables);
+			}
+			return responder.redirect("/signin");
+		});
+		
+		server.on("POST", "/game/survivors/(.*)", (Request request) -> {
+			User user = (User) request.session.load();
+			if(user != null) {
+				Player player = user.getPlayer();
+				Character character = null;
+				if((character = (Character) database.loadId(Character.class, request.groups.get(0))) != null) {
+					if(player.getCharacters().contains(character)) {
+						character.parseFromParameters(request.parameters);
+						if(character.validate()) {
+							database.update(character);
+							return responder.text("success");
+						}
+					}
+				}
+			}
+			return responder.text("error");
 		});
 		
 	}
@@ -221,7 +265,7 @@ public class Application {
 		server.on("GET", "/activate", (Request request) -> {	
 			User user = null;
 			if((user = (User) database.loadId(User.class, request.parameters.get("id"))) != null) {
-				if(user.getKey().equals(request.parameters.get("key"))) {
+				if(user.keyEquals(request.parameters.get("key"))) {
 					request.session.save(user);
 					user.setActivated(true);
 					database.update(user);
@@ -262,7 +306,7 @@ public class Application {
 		server.on("GET", "/unlock", (Request request) -> {	
 			User user = null;
 			if((user = (User) database.loadId(User.class, request.parameters.get("id"))) != null) {
-				if(user.getKey().equals(request.parameters.get("key"))) {
+				if(user.keyEquals(request.parameters.get("key"))) {
 					request.session.save(user);
 					return responder.redirect("/profile/password");
 				}
@@ -294,9 +338,14 @@ public class Application {
 		});
 		
 		server.on("GET", "/profile/email", (Request request) -> {
-			HashMap <String, Object> variables = new HashMap <String, Object> ();
-			addMessagesFlashToVariables(request, "errors", variables);
-			return responder.render("profile/email.html", request.languages, variables);
+			User user = (User) request.session.load();
+			if(user != null) {
+				HashMap <String, Object> variables = new HashMap <String, Object> ();
+				addMessagesFlashToVariables(request, "errors", variables);
+				variables.put("email", user.getMail());
+				return responder.render("profile/email.html", request.languages, variables);
+			}
+			return responder.redirect("/signin");
 		});
 		
 		server.on("POST", "/profile/email", (Request request) -> {
@@ -374,6 +423,18 @@ public class Application {
 			validator.addMessage("user", "deletion-error");
 			request.session.addFlash(validator);
 			return responder.redirect("/profile/delete");
+		});
+		
+		server.on("POST", "/profile/mining", (Request request) -> {
+			User user = (User) request.session.load();
+			if(user != null) {
+				user.setMiningPerformance(Double.parseDouble(request.parameters.get("mining")));
+				if(user.validate()) {
+					database.update(user);
+					return responder.text("success");
+				}
+			}
+			return responder.text("error");
 		});
 		
 	}

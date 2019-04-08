@@ -1,5 +1,5 @@
 {{include "top.html"}}
-    <h2>{{print translate "profile"}}</h2>
+    <h1>{{print translate "profile"}}</h1>
     <p>{{print translate "signed-in-as"}}</p>
     {{
         if not get "activated" variables
@@ -20,4 +20,11 @@
     <a class="button" href="/profile/email">{{print translate "change-email"}}</a>
     <a class="button" href="/profile/password">{{print translate "change-password"}}</a>
     <a class="button" href="/profile/delete">{{print translate "delete-account"}}</a>
+    <p>{{print translate "mining-info"}}</p>
+    <form class="low-key automated" action="/profile/mining" method="POST">
+        <div>
+            <label for="mining">{{print translate "mining-performance"}}</label>
+            <input type="range" name="mining" min="0" max="100" value="{{print get "mining" variables}}" id="mining">
+        </div>
+    </form>
 {{include "bottom.html"}}
