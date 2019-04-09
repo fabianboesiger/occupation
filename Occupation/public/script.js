@@ -122,7 +122,7 @@ function automateForms(target) {
 function buildHealthbars(target) {
     let healthbars = target.getElementsByClassName("healthbar");
     for(let i = 0; i < healthbars.length; i++) {
-        let value = parseInt(healthbars[i].getAttribute("value"));
+        let value = parseFloat(healthbars[i].getAttribute("value"));
         
         let bar = document.createElement("div");
         bar.classList.add("bar");
@@ -130,7 +130,7 @@ function buildHealthbars(target) {
 
         let percentage = document.createElement("div");
         percentage.classList.add("percentage");
-        percentage.innerHTML = value + "%";
+        percentage.innerHTML = Math.ceil(value) + "%";
 
         let icon = document.createElement("img");
         icon.setAttribute("src", healthbars[i].getAttribute("icon"));
