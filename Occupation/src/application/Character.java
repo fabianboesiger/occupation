@@ -1,8 +1,16 @@
 package application;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Random;
 
+import database.Database;
 import database.templates.BooleanTemplate;
+import database.templates.DoubleTemplate;
 import database.templates.IntegerTemplate;
 import database.templates.ObjectTemplate;
 import database.templates.StringTemplate;
@@ -13,13 +21,15 @@ public class Character extends ObjectTemplate {
 	
 	public static final String NAME = "characters";
 	
+	private static final double HUNGER_PER_SECOND = 100.0 / (24.0 * 60.0 * 60.0);
+	
 	private StringTemplate name;
 	private BooleanTemplate male;
 	private IntegerTemplate activity;
 	
-	private IntegerTemplate health;
-	private IntegerTemplate hunger;
-	private IntegerTemplate fatigue;
+	private DoubleTemplate health;
+	private DoubleTemplate hunger;
+	private DoubleTemplate fatigue;
 	
 	private IntegerTemplate strength;
 	private IntegerTemplate endurance;
@@ -30,10 +40,17 @@ public class Character extends ObjectTemplate {
 	// private ObjectTemplateReference <>
 	
 	public Character() {
-		name = new StringTemplate("name");
-		name.set("Max Muster");
 		male = new BooleanTemplate("male");
 		male.set(random.nextBoolean());
+		name = new StringTemplate("name");
+		String randomName = "";
+		if((Boolean) male.get()) {
+			randomName += randomSelect(new File("stats/names/male-forenames.txt"));
+		} else {
+			randomName += randomSelect(new File("stats/names/female-forenames.txt"));
+		}
+		randomName += (" " + randomSelect(new File("stats/names/surnames.txt")));
+		name.set(randomName);
 		activity = new IntegerTemplate("activity", 0, 1);
 		activity.set(0);
 		
@@ -48,15 +65,45 @@ public class Character extends ObjectTemplate {
 		intelligence = new IntegerTemplate("intelligence", 1, 100);
 		intelligence.set(random.nextInt(100) + 1);
 		
-		health = new IntegerTemplate("health", 0, 100);
-		health.set(100);
-		hunger = new IntegerTemplate("hunger", 0, 100);
-		hunger.set(100);
-		fatigue = new IntegerTemplate("fatigue", 0, 100);
-		fatigue.set(100);
+		health = new DoubleTemplate("health", 0, 100);
+		health.set(100.0);
+		hunger = new DoubleTemplate("hunger", 0, 100);
+		hunger.set(100.0);
+		fatigue = new DoubleTemplate("fatigue", 0, 100);
+		fatigue.set(100.0);
 	}
 
-	public void work(int multiplier) {
+	public void update() {
+		if((Double) hunger.get() <= HUNGER_PER_SECOND) {
+			hunger.set(0.0);
+		} else {
+			hunger.set((Double) hunger.get() - HUNGER_PER_SECOND);
+		}
+	}
+	
+	public String randomSelect(File file) {
+	
+		if(!file.exists()) {
+			return null;
+		}
+		
+		try {
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Database.ENCODING));
+			ArrayList <String> list = new ArrayList <String> ();
+			
+			String line = null;
+			while((line = bufferedReader.readLine()) != null) {
+				list.add(line);
+			}
+			
+			bufferedReader.close();
+			
+			return list.get(random.nextInt(list.size()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 		
 	}
 	

@@ -8,7 +8,7 @@ import database.templates.ObjectTemplate;
 public class Game extends Thread {
 	
 	private static final int LOOP_TIME = 5000;
-	private static final int MULTIPLIER = 1;
+	private static final int MULTIPLIER = 5000;
 	private boolean paused;
 	private long nextLoop;
 	private Database database;
@@ -35,10 +35,14 @@ public class Game extends Thread {
 	}
 	
 	public void loop() {
+		System.out.println("Executing Game Loop (x" + MULTIPLIER + ")");
+		
 		LinkedList <ObjectTemplate> users = database.loadAll(User.class);
 		for(ObjectTemplate object : users) {
 			Player player = ((User) object).getPlayer();
-			player.update(MULTIPLIER);
+			for(int i = 0; i < MULTIPLIER; i++) {
+				player.update();
+			}
 			database.update(player);
 		}
 	}

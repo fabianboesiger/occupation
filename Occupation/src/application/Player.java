@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class Player extends ObjectTemplate {
 		}
 		inventory = new ListTemplate <IntegerTemplate> ("inventory", IntegerTemplate::new);
 		space = new IntegerTemplate("space", 0, null);
+		space.set(0);
 	}
 	
 	public LinkedList <HashMap <String, Object>> getCharacterList() {
@@ -45,9 +47,9 @@ public class Player extends ObjectTemplate {
 		return characters;
 	}
 	
-	public void update(int multiplier) {
+	public void update() {
 		for(Character character : characters) {
-			character.work(multiplier);
+			character.update();
 		}
 	}
 	
@@ -58,22 +60,33 @@ public class Player extends ObjectTemplate {
 			inventory.add(zero);
 		}
 		
-		if(!file.exists()) {
+		HashMap <String, Object> map = getItemStats(type);
+		if(map == null) {
 			return false;
 		}
 		
-		
-		if(space.get() < ) {
-			inventory.get(type).set(((Integer) inventory.get(type).get()) + amount);
+		if((Integer) space.get() < ((Integer) map.get("space")) * amount) {
+			return false;
 		}
+		
+		inventory.get(type).set(((Integer) inventory.get(type).get()) + amount);
+		space.set((Integer) space.get() - ((Integer) map.get("space")) * amount);
+		return true;
 	}
 	
 	public boolean removeItems(int type, int amount) {
-		if((Integer) inventory.get(type).get() >= amount) {
-			inventory.get(type).set(((Integer) inventory.get(type).get()) - amount);
-			return true;
+		if((Integer) inventory.get(type).get() < amount) {	
+			return false;
 		}
-		return false;
+		HashMap <String, Object> map = getItemStats(type);
+		if(map == null) {
+			return false;
+		}
+		
+		inventory.get(type).set(((Integer) inventory.get(type).get()) - amount);
+		space.set((Integer) space.get() + ((Integer) map.get("space")) * amount);
+		return true;
+
 	}
 	
 	public HashMap <String, Object> getItemStats(int type) {
@@ -83,7 +96,9 @@ public class Player extends ObjectTemplate {
 		}
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Database.ENCODING));
-			HashMap <String, String> map = new HashMap <String, String> ();
+			HashMap <String, Object> map = new HashMap <String, Object> ();
+			map.put("name", "default");
+			map.put("space", new Integer(0));
 			
 			String line = null;
 			while((line = bufferedReader.readLine()) != null) {
@@ -91,7 +106,14 @@ public class Player extends ObjectTemplate {
 				if(indexOfEquals != -1) {
 					String key = line.substring(0, indexOfEquals).trim();
 					String value = line.substring(indexOfEquals + 1, line.length()).trim();
-					map.put(key, value);
+					if(map.containsKey(key)) {
+						try {
+							Object object = map.get(key).getClass().getConstructor(String.class).newInstance(value);
+							map.put(key, object);
+						} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 			
