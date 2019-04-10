@@ -22,6 +22,8 @@ public class Character extends ObjectTemplate {
 	public static final String NAME = "characters";
 	
 	private static final double HUNGER_PER_SECOND = 100.0 / (24.0 * 60.0 * 60.0);
+	private static final double FATIGUE_REGENERATION_PER_SECOND = 100.0 / (8.0 * 60.0 * 60.0);
+	private static final double LOOTER_FATIGUE_DRAW_PER_SECOND = 100.0 / (16.0 * 60.0 * 60.0);
 	
 	private StringTemplate name;
 	private BooleanTemplate male;
@@ -44,7 +46,7 @@ public class Character extends ObjectTemplate {
 		male.set(random.nextBoolean());
 		name = new StringTemplate("name");
 		String randomName = "";
-		if((Boolean) male.get()) {
+		if(male.get()) {
 			randomName += randomSelect(new File("stats/names/male-forenames.txt"));
 		} else {
 			randomName += randomSelect(new File("stats/names/female-forenames.txt"));
@@ -65,19 +67,47 @@ public class Character extends ObjectTemplate {
 		intelligence = new IntegerTemplate("intelligence", 1, 100);
 		intelligence.set(random.nextInt(100) + 1);
 		
-		health = new DoubleTemplate("health", 0, 100);
+		health = new DoubleTemplate("health", 0.0, 100.0);
 		health.set(100.0);
-		hunger = new DoubleTemplate("hunger", 0, 100);
+		hunger = new DoubleTemplate("hunger", 0.0, 100.0);
 		hunger.set(100.0);
-		fatigue = new DoubleTemplate("fatigue", 0, 100);
+		fatigue = new DoubleTemplate("fatigue", 0.0, 100.0);
 		fatigue.set(100.0);
 	}
 
 	public void update() {
-		if((Double) hunger.get() <= HUNGER_PER_SECOND) {
-			hunger.set(0.0);
+		addToDouble(hunger, -HUNGER_PER_SECOND);
+		
+		if(activity.get() == 0) {
+			// Resting
+			addToDouble(fatigue, FATIGUE_REGENERATION_PER_SECOND);
+		} else
+		if(activity.get() == 1) {
+			// Looter
+			addToDouble(fatigue, -LOOTER_FATIGUE_DRAW_PER_SECOND);
+		} else
+		if(activity.get() == 2) {
+			// Looter
+			addToDouble(fatigue, -LOOTER_FATIGUE_DRAW_PER_SECOND);
+		} else
+		if(activity.get() == 3) {
+			// Looter
+			addToDouble(fatigue, -LOOTER_FATIGUE_DRAW_PER_SECOND);
+		} else
+		if(activity.get() == 4) {
+			// Looter
+			addToDouble(fatigue, -LOOTER_FATIGUE_DRAW_PER_SECOND);
+		}
+	}
+	
+	public void addToDouble(DoubleTemplate template, double summand) {
+		if(template.get() + summand > template.getMaximum()) {
+			template.set(template.getMaximum());
+		} else
+		if(template.get() + summand < template.getMinimum()) {
+			template.set(template.getMinimum());
 		} else {
-			hunger.set((Double) hunger.get() - HUNGER_PER_SECOND);
+			template.set(template.get() + summand);
 		}
 	}
 	

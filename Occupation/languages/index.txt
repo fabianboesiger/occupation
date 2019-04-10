@@ -76,7 +76,8 @@ torso
 tool
 legs
 feet
-none
+resting
 looter
 mining-performance
 mining-info
+ranking

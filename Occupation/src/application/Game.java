@@ -17,6 +17,8 @@ public class Game extends Thread {
 		nextLoop =  System.currentTimeMillis();
 		paused = false;
 		this.database = database;
+		
+		System.out.println("Starting Game with Loop Time " + LOOP_TIME + " and Multiplier " + MULTIPLIER + ", Speed is " + (double) MULTIPLIER / LOOP_TIME);
 	}
 	
 	@Override
@@ -35,7 +37,7 @@ public class Game extends Thread {
 	}
 	
 	public void loop() {
-		System.out.println("Executing Game Loop (x" + MULTIPLIER + ")");
+		System.out.println("Executing Game Loop");
 		
 		LinkedList <ObjectTemplate> users = database.loadAll(User.class);
 		for(ObjectTemplate object : users) {

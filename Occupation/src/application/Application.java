@@ -2,9 +2,14 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import database.Database;
+import database.templates.ObjectTemplate;
 import database.validator.Validator;
 import mailer.Mailer;
 import manager.DatabaseSessionManager;
@@ -85,6 +90,25 @@ public class Application {
 			} else {
 				return responder.next();
 			}
+		});
+		
+		server.on("GET", "/game/ranking", (Request request) -> {
+			List <ObjectTemplate> objects = database.loadAll(Player.class);
+			ArrayList <Player> players = new ArrayList <Player> ();
+			for(ObjectTemplate object : objects) {
+				players.add((Player) object);
+			}
+			Collections.sort(players);
+
+			HashMap <String, Object> variables = new HashMap <String, Object> ();
+			LinkedList <HashMap <String, Object>> ranking = new LinkedList <HashMap <String, Object>> ();
+			
+			for(Player player : players) {
+				ranking.add(player.getInfo());
+			}
+
+			variables.put("ranking", ranking);
+			return responder.render("game/ranking.html", request.languages, variables);
 		});
 		
 		server.on("GET", "/game/map", (Request request) -> {

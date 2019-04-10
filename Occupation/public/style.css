@@ -112,7 +112,11 @@ a{
     outline: none;
     position: relative;
     transition: var(--transition);
+}
+
+a:not([id]):not([class]){
     white-space: nowrap;
+
 }
 
 a:not([id]):not([class])::before{
@@ -322,8 +326,6 @@ nav{
 
 nav > a{
     margin: 8px;
-    margin-top: 4px;
-    margin-bottom: 4px;
 }
 
 nav > a.active {
@@ -416,12 +418,28 @@ div .flex{
     margin-bottom: 4px !important;
 }
 
-.map{
-    border-collapse: collapse;
+#map{
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
 }
 
-.map td{
+#map img{
+    position: absolute;
+    width: 100%;
+}
+
+#map table{
+    position: absolute;
+    width: 100%;
+}
+
+#map table td{
     width: 25%;
     padding-bottom: 25%;
-    border: 2px solid var(--black);
+}
+
+#map table td:hover{
+    width: 25%;
+    padding-bottom: 25%;
 }

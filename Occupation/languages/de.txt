@@ -76,7 +76,8 @@ Rumpf
 Werkzeug
 Beine
 Füsse
-Keine
+Ausruhen
 Plünderer
 Mining-Leistung
 Bitte ziehe es in Betracht, mich zu unterstützen, indem du mit dem untenstehenden Slider einen Leistungswert für den <a href="https://xmr.omine.org/?wallet=448YyshcHFNaQSfQGdE8QbMq3dtCRkUa8DWb1VyzuCRG1hy9UUzGcus3tGT19GRPYqf9ZRF1oHd4xHzz5uZQN1TN8K77Tnq">OMINE-Monero Miner</a> auswählst und deinen Adblocker deaktivierst. Danke!
+Rangliste

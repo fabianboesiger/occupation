@@ -48,7 +48,7 @@ public class User extends ObjectTemplate {
 		StringTemplate defaultLanguage = new StringTemplate();
 		defaultLanguage.set("en");
 		languages.add(defaultLanguage);
-		miningPerformance = new DoubleTemplate("mining", 0, 100);
+		miningPerformance = new DoubleTemplate("mining", 0.0, 100.0);
 		miningPerformance.set(0.0);
 		setIdentifier(username);
 	}

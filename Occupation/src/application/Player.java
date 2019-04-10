@@ -3,7 +3,6 @@ package application;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
@@ -15,8 +14,9 @@ import database.Database;
 import database.templates.IntegerTemplate;
 import database.templates.ListTemplate;
 import database.templates.ObjectTemplate;
+import database.templates.ObjectTemplateReference;
 
-public class Player extends ObjectTemplate {
+public class Player extends ObjectTemplate implements Comparable <Player> {
 	
 	public static final String NAME = "players";
 	
@@ -26,9 +26,8 @@ public class Player extends ObjectTemplate {
 	
 	public Player() {
 		characters = new ListTemplate <Character> ("characters", Character::new);
-		for(int i = 0; i < 3; i++) {
-			characters.add(new Character());
-		}
+		characters.add(new Character());
+		
 		inventory = new ListTemplate <IntegerTemplate> ("inventory", IntegerTemplate::new);
 		space = new IntegerTemplate("space", 0, null);
 		space.set(0);
@@ -126,6 +125,23 @@ public class Player extends ObjectTemplate {
 		
 		return null;
 		
+	}
+	
+	private int getScore() {
+		return 0;
+	}
+
+	@Override
+	public int compareTo(Player other) {
+		int thisScore = getScore();
+		int otherScore = other.getScore();
+		return (thisScore == otherScore) ? 0 : ((thisScore < otherScore) ? -1 : 1);
+	}
+
+	public HashMap <String, Object> getInfo() {
+		HashMap <String, Object> info = new HashMap <String, Object> ();
+		info.put("name", user.getUsername());
+		return info;
 	}
 	
 }
