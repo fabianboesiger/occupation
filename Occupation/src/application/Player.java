@@ -24,13 +24,22 @@ public class Player extends ObjectTemplate implements Comparable <Player> {
 	private ListTemplate <IntegerTemplate> inventory;
 	private IntegerTemplate space;
 	
-	public Player() {
+	private ObjectTemplateReference <User> user;
+	
+	public Player(User user) {
+		System.out.println("pls");
 		characters = new ListTemplate <Character> ("characters", Character::new);
 		characters.add(new Character());
-		
 		inventory = new ListTemplate <IntegerTemplate> ("inventory", IntegerTemplate::new);
 		space = new IntegerTemplate("space", 0, null);
 		space.set(0);
+		this.user = new ObjectTemplateReference <User> ("user", User::new);
+		this.user.set(user);
+		System.out.println("ple");
+	}
+	
+	public Player() {
+		this(null);
 	}
 	
 	public LinkedList <HashMap <String, Object>> getCharacterList() {
@@ -97,7 +106,7 @@ public class Player extends ObjectTemplate implements Comparable <Player> {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Database.ENCODING));
 			HashMap <String, Object> map = new HashMap <String, Object> ();
 			map.put("name", "default");
-			map.put("space", new Integer(0));
+			map.put("space", 0);
 			
 			String line = null;
 			while((line = bufferedReader.readLine()) != null) {
@@ -140,8 +149,11 @@ public class Player extends ObjectTemplate implements Comparable <Player> {
 
 	public HashMap <String, Object> getInfo() {
 		HashMap <String, Object> info = new HashMap <String, Object> ();
-		info.put("name", user.getUsername());
+		System.out.println(user == null);
+		info.put("name", user.get().getUsername());
+		info.put("survivors", characters.size());
+		info.put("score", getScore());
 		return info;
 	}
-	
+
 }
