@@ -21,7 +21,7 @@
 
 @font-face{
   font-family: PixelFont;
-  src: url(fonts/PixelFont.ttf);
+  src: url(/fonts/PixelFont.ttf);
 }
 
 /* Structure */
@@ -64,7 +64,7 @@ main, header, footer{
 	padding-right: var(--padding);
 }
 
-.centered > *:not(script), form:not(.low-key) > *:not(script), .block > *:not(script){
+form:not(.low-key) > *:not(script), .block > *:not(script){
 	display: block;
 	box-sizing: border-box;
 	width: 100%;
@@ -99,11 +99,6 @@ ul{
 img{
     image-rendering: pixelated;
     image-rendering: crisp-edges;
-}
-
-#title{
-    width: 100%;
-    max-width: 512px;
 }
 
 a{
@@ -183,6 +178,11 @@ table.list > tbody > tr:last-child > *{
     border-bottom: 2px solid var(--black);
 }
 
+table.list td > *:not(script){
+	margin-bottom: 0px;
+    margin-top: 0px;
+}
+
 th, td{
 	text-align: left;
     white-space: nowrap;
@@ -192,13 +192,20 @@ th, td{
     padding-right: 8px;
 }
 
-th:first-child, td:first-child{
+th{
+    background-color: var(--black);
+    color: var(--green);
+}
+
+
+table:not(.list) > tbody > tr > th:first-child, table:not(.list) > tbody > tr > td:first-child{
     padding-left: 0px;
 }
 
-th:last-child, td:last-child{
+table:not(.list) > tbody > tr > th:last-child, table:not(.list) > tbody > tr > td:last-child{
     padding-right: 0px;
 }
+
 
 /* Form and Button Styling */
 
@@ -251,6 +258,8 @@ input[type=range]::-webkit-slider-thumb{
     background-color: var(--orange);
     cursor: pointer;
     transition: var(--transition);
+    border: none;
+    border-radius: 0px;
 }
 
 input[type=range]::-webkit-slider-thumb:hover, input[type=range]::-webkit-slider-thumb:focus{
@@ -265,6 +274,8 @@ input[type=range]::-moz-range-thumb{
     background-color: var(--orange);
     cursor: pointer;
     transition: var(--transition);
+    border: none;
+    border-radius: 0px;
 }
 
 input[type=range]::-moz-range-thumb:hover, input[type=range]::-moz-range-thumb:focus{
@@ -322,10 +333,15 @@ nav{
 	align-self: flex-start;
     flex-flow: row wrap;
     z-index: 100;
+    padding-left: calc(var(--margin) - 8px);
+    padding-right: calc(var(--margin) - 8px);
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 nav > a{
-    margin: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
 }
 
 nav > a.active {
@@ -346,17 +362,18 @@ nav > a.active::before {
 
 /* Alignment */
 
-div .flex{
+
+.flex{
 	display: flex;
     justify-content: space-between;
 }
 
 .left{
-	text-align: left;
+	text-align: left !important;
 }
 
 .right{
-	text-align: right;
+	text-align: right !important;
 }
 
 .centered{
@@ -367,10 +384,47 @@ div .flex{
 
 /* Specific Elements */
 
+.footer-element{
+    text-align: center;
+    display: inline-block !important;
+    width: 33.3% !important;
+    vertical-align: top;
+}
+
+@media only screen and (max-width: 512px){
+    .footer-element{
+        width: 100% !important;
+    }
+    
+    .footer-element:not(:last-child){
+        margin-bottom: 0px;
+    }
+
+    .footer-element.left{
+        text-align: center !important;
+    }
+    
+    .footer-element.right{
+        text-align: center !important;
+    }
+}
+
+.social{
+    border-bottom: none;
+}
+
+.social img{
+    vertical-align: middle;
+    width: 32px;
+    height: 32px;
+}
+
 #title{
 	display: inline-block;
 	padding: 0px;
-	background-color: transparent;
+    background-color: transparent;
+    width: 100%;
+    max-width: 512px;
 }
 
 .healthbar{
@@ -406,16 +460,19 @@ div .flex{
     width: 12px;
 }
 
-.survivor td > *:not(script){
-	margin-bottom: 0px;
-    margin-top: 0px;
-}
-
-.survivor .portrait{
+.creature{
     width: 128px;
     height: 128px;
     margin-top: 4px !important;
     margin-bottom: 4px !important;
+}
+
+.item{
+    width: 64px;
+    height: 64px;
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+    vertical-align: middle;
 }
 
 #map{
@@ -437,9 +494,11 @@ div .flex{
 #map table td{
     width: 25%;
     padding-bottom: 25%;
+    opacity: 0;
+    transition: var(--transition);
 }
 
 #map table td:hover{
-    width: 25%;
-    padding-bottom: 25%;
+    opacity: 0.2;
+    background-color: var(--black);
 }

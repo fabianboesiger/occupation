@@ -68,6 +68,8 @@ function updatePage(target) {
     automateForms(target);
     // Healthbars
     buildHealthbars(target);
+    // Calculate Time
+    timeMinus(target);
 }
 
 // Image Animator
@@ -139,5 +141,24 @@ function buildHealthbars(target) {
         healthbars[i].appendChild(bar);
         healthbars[i].appendChild(icon);
         healthbars[i].appendChild(percentage);
+    }
+}
+
+// Calculate Time
+function timeMinus(target) {
+    let tminuses = target.getElementsByClassName("tminus");
+    for(let i = 0; i < tminuses.length; i++) {
+        let minus = parseFloat(tminuses[i].getAttribute("minus"));
+        let time = new Date().getTime();
+        let date = new Date(time - minus);
+        console.log(time, minus);
+        tminuses[i].innerHTML = twoDigits(date.getDate()) + "." + twoDigits(date.getMonth()) + "." + date.getFullYear() + " " + twoDigits(date.getHours()) + ":" + twoDigits(date.getMinutes()) + ":" + twoDigits(date.getSeconds());
+    }
+
+    function twoDigits(input) {
+        while(("" + input).length < 2) {
+            input = ("0" + input);
+        }
+        return input;
     }
 }

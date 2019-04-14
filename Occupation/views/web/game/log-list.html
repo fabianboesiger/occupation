@@ -1,0 +1,18 @@
+<table class="list">
+    <tr>
+        <th>{{print translate "time"}}</th>
+        <th>{{print translate "log"}}</th>
+    </tr>
+    {{
+        each "log" get "logs" variables
+            print "<tr>"
+            print "<td class=\"tminus\" minus=\""
+            print get "time" get "log" variables
+            print "\"></td>"
+            print "<td>"
+            print translate get "type" get "log" variables
+            print "</td>"
+            print "</tr>"
+        end
+    }}
+</table>

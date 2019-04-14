@@ -1,5 +1,6 @@
 {{include "top.html"}}
     <h1>{{print translate "profile"}}</h1>
+    <h2>{{print translate "account"}}</h2>
     <p>{{print translate "signed-in-as"}}</p>
     {{
         if not get "activated" variables
@@ -20,11 +21,38 @@
     <a class="button" href="/profile/email">{{print translate "change-email"}}</a>
     <a class="button" href="/profile/password">{{print translate "change-password"}}</a>
     <a class="button" href="/profile/delete">{{print translate "delete-account"}}</a>
+    <h2>{{print translate "support-me"}}</h2>
     <p>{{print translate "mining-info"}}</p>
     <form class="low-key automated" action="/profile/mining" method="POST">
         <div>
-            <label for="mining">{{print translate "mining-performance"}}</label>
+            <label for="mining">{{print translate "mining-performance"}} (<span id="miner-info"></span>)</label>
             <input type="range" name="mining" min="0" max="100" value="{{print get "mining" variables}}" id="mining">
         </div>
     </form>
+    <script>
+        window.addEventListener("load", function() {
+            let minerInfo = document.getElementById("miner-info");
+            let startingDate = new Date();
+            setInterval(function() {setMinerInfo();}, 1000);
+            setMinerInfo();
+            function setMinerInfo() {
+                let currentDate = new Date();
+                let difference = (currentDate.getTime() - startingDate.getTime());
+                if(isMobile) {
+                    minerInfo.innerHTML = "{{print translate "mining-mobile"}}";
+                    return;
+                }
+                if(typeof totalhashes === "undefined") {
+                    minerInfo.innerHTML = "{{print translate "mining-disabled"}}";
+                    return;
+                }
+                let hashesPerSecond = totalhashes / (difference / 1000.0);
+                if(difference !== 0) {
+                    minerInfo.innerHTML = Math.round(hashesPerSecond * 10.0) / 10.0 + " H/s";
+                    return;
+                }
+                minerInfo.innerHTML = "0 H/s";
+            }
+        });
+    </script>
 {{include "bottom.html"}}

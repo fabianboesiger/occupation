@@ -1,14 +1,15 @@
 <footer>
-	<div class="centered">
-		<div class="flex">
-			<div class="left">
-			    © Fabian Bösiger, <span class="year"></span>
-			</div>
-			<div class="right">
-                <a href="/server">{{print translate "server-stats"}}</a><br/>
-                <a href="mailto:{{print get "email" variables}}">{{print translate "contact"}}</a><br/>
-                <a href="http://blog.ddnss.ch">{{print translate "blog"}}</a>
-			</div>
-		</div>
+	<div class="block centered">
+        <div class="footer-element left">
+            <a href="/server">{{print translate "server-stats"}}</a><br/>
+            <a href="mailto:{{print get "email" variables}}">{{print translate "contact"}}</a><br/>
+        </div><div class="footer-element">
+            {{print translate "share"}}<br/>
+            <a class="social" href="http://www.reddit.com/submit?url={{print urlencode get "url" variables}}" target="blank"><img src="/media/images/social/reddit.png"></img></a>
+            <a class="social" href="https://twitter.com/intent/tweet?url={{print urlencode get "url" variables}}" target="blank"><img src="/media/images/social/twitter.png"></img></a>
+            <a class="social" href="https://wa.me/?text={{print urlencode get "url" variables}}" target="blank"><img src="/media/images/social/whatsapp.png"></img></a>
+        </div><div class="footer-element right">
+            © Fabian Bösiger, <span class="year"></span>
+        </div>
 	</div>
 </footer>
