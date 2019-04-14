@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,23 +20,23 @@ import database.templates.ObjectTemplateReference;
 public class Player extends ObjectTemplate implements Comparable <Player> {
 	
 	public static final String NAME = "players";
+
+	private static final int LOGS_SIZE = 32;
 	
 	private ListTemplate <Character> characters;
 	private ListTemplate <IntegerTemplate> inventory;
 	private IntegerTemplate space;
-	
+	private ListTemplate <Log> logs;
 	private ObjectTemplateReference <User> user;
 	
 	public Player(User user) {
-		System.out.println("pls");
 		characters = new ListTemplate <Character> ("characters", Character::new);
-		characters.add(new Character());
 		inventory = new ListTemplate <IntegerTemplate> ("inventory", IntegerTemplate::new);
 		space = new IntegerTemplate("space", 0, null);
-		space.set(0);
+		space.set(1000000);
 		this.user = new ObjectTemplateReference <User> ("user", User::new);
 		this.user.set(user);
-		System.out.println("ple");
+		logs = new ListTemplate <Log> ("logs", Log::new);
 	}
 	
 	public Player() {
@@ -50,7 +51,20 @@ public class Player extends ObjectTemplate implements Comparable <Player> {
 		}
 		return output;
 	}
-
+	
+	public LinkedList <HashMap <String, Object>> getInventoryList() {
+		LinkedList <HashMap <String, Object>> output = new LinkedList <HashMap <String, Object>> ();
+		for(int i = 0; i < inventory.size(); i++) {
+			output.add(getItemStats(i));
+			output.get(output.size() - 1).put("quantity", inventory.get(i).get());
+		}
+		return output;
+	}
+	
+	public int getSpace() {
+		return space.get();
+	}
+	
 	public List <Character> getCharacters() {
 		return characters;
 	}
@@ -62,7 +76,7 @@ public class Player extends ObjectTemplate implements Comparable <Player> {
 	}
 	
 	public boolean addItems(int type, int amount) {
-		while(inventory.size() < type) {
+		while(inventory.size() <= type) {
 			IntegerTemplate zero = new IntegerTemplate();
 			zero.set(0);
 			inventory.add(zero);
@@ -86,6 +100,7 @@ public class Player extends ObjectTemplate implements Comparable <Player> {
 		if((Integer) inventory.get(type).get() < amount) {	
 			return false;
 		}
+		
 		HashMap <String, Object> map = getItemStats(type);
 		if(map == null) {
 			return false;
@@ -97,7 +112,7 @@ public class Player extends ObjectTemplate implements Comparable <Player> {
 
 	}
 	
-	public HashMap <String, Object> getItemStats(int type) {
+	private HashMap <String, Object> getItemStats(int type) {
 		File file = new File("stats/items/" + type + ".txt");
 		if(!file.exists()) {
 			return null;
@@ -136,7 +151,7 @@ public class Player extends ObjectTemplate implements Comparable <Player> {
 		
 	}
 	
-	private int getScore() {
+	public int getScore() {
 		return 0;
 	}
 
@@ -149,11 +164,33 @@ public class Player extends ObjectTemplate implements Comparable <Player> {
 
 	public HashMap <String, Object> getInfo() {
 		HashMap <String, Object> info = new HashMap <String, Object> ();
-		System.out.println(user == null);
-		info.put("name", user.get().getUsername());
+		info.put("username", user.get().getUsername());
 		info.put("survivors", characters.size());
 		info.put("score", getScore());
 		return info;
+	}
+	
+	public void addLog(String type, String[] data) {
+		logs.add(new Log(type, data));
+		while(logs.size() > LOGS_SIZE) {
+			Log log = logs.remove(0);
+			database.deleteId(Log.class, log.getId());
+		}
+	}
+	
+	public void addCharacter() {
+		Character character = new Character(this);
+		characters.add(character);
+		addLog("log-new-character", new String[] {character.getName()});
+	}
+
+	public LinkedList <HashMap <String, Object>> getLogs() {
+		LinkedList <HashMap <String, Object>> output = new LinkedList <HashMap <String, Object>> ();
+		for(Log log : logs) {
+			output.add(log.getLog());
+		}
+		Collections.reverse(output);
+		return output;
 	}
 
 }

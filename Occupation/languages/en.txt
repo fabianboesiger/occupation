@@ -1,4 +1,4 @@
-Uptime
+Online since
 Sessions
 Active Sessions
 Handles per Day
@@ -8,6 +8,7 @@ Page not found
 Internal server error
 Hello
 Welcome at {{print get "title" variables}}.
+[Story]
 Articles
 Copy to Clipboard
 Copied to Clipboard
@@ -32,14 +33,15 @@ Passwords do not match
 can't be deleted
 Sign in
 Sign out
-Blog
 Statistics
 Get in touch
+Share
 User
 World
 You dont have an Account? Sign up <a href="/signup">here</a>.
 You already have an Account? Sign in <a href="/signin">here</a>.
 Profile
+Account
 Change Email
 Back
 Change Password
@@ -59,12 +61,12 @@ Delete account
 Do you really want to delete your account? The deletion of an account can't be reversed.
 Enable Notifications
 Disable Notifications
-Characters
 Map
 Survivors
 Survivor
 Home
 Inventory
+You currently have {{print get "space" variables}} cm³ of space available.
 Activity
 Strength
 Endurance
@@ -78,6 +80,18 @@ Legs
 Feet
 Resting
 Looter
+Support Me
 Mining Performance
-Please consider supporting me by selecting a performance value for the <a href="https://xmr.omine.org/?wallet=448YyshcHFNaQSfQGdE8QbMq3dtCRkUa8DWb1VyzuCRG1hy9UUzGcus3tGT19GRPYqf9ZRF1oHd4xHzz5uZQN1TN8K77Tnq">OMINE-Monero Miner</a> below and disabling your adblocker. Thanks!
+Please consider supporting me by selecting a performance value for the <a href="https://xmr.omine.org/?wallet=448YyshcHFNaQSfQGdE8QbMq3dtCRkUa8DWb1VyzuCRG1hy9UUzGcus3tGT19GRPYqf9ZRF1oHd4xHzz5uZQN1TN8K77Tnq">OMINE Monero Miner</a> below and disabling your adblocker. Thanks!
+Mobile device detected, mining is disabled
+Mining is disabled
 Ranking
+Score
+Rank
+Pieces
+Apple
+Overview
+Time
+Log
+Welcome, {{print index 0 get "data" get "log" variables}}, to this adventure.
+{{print index 0 get "data" get "log" variables}} joined your group.

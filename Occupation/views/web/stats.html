@@ -1,22 +1,22 @@
 <table class="list">
     <tr>
-        <th>{{print translate "uptime"}}</th>
-        <td>{{print get "uptime" variables}}</td>
+        <td>{{print translate "uptime"}}</td>
+        <td class="tminus" minus="{{print get "uptime" variables}}"></td>
     </tr>
     <tr>
-        <th>{{print translate "handles-per-day"}}</th>
+        <td>{{print translate "handles-per-day"}}</td>
         <td>{{print get "handles-per-day" variables}}</td>
     </tr>
     <tr>
-        <th>{{print translate "bytes-per-day"}}</th>
+        <td>{{print translate "bytes-per-day"}}</td>
         <td>{{print get "bytes-per-day" variables}}</td>
     </tr>
     <tr>
-        <th>{{print translate "sessions"}}</th>
+        <td>{{print translate "sessions"}}</td>
         <td>{{print get "sessions" variables}}</td>
     </tr>
     <tr>
-        <th>{{print translate "active-sessions"}}</th>
+        <td>{{print translate "active-sessions"}}</td>
         <td>{{print get "active-sessions" variables}}</td>
     </tr>
 </table>

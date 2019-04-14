@@ -1,3 +1,31 @@
 {{include "top.html"}}
-	<h1>{{print translate "ranking"}}</h1>
+    <h1>{{print translate "ranking"}}</h1>
+    <div class="overflow">
+        <table class="list">
+            <tr>
+                <th>{{print translate "rank"}}</th>
+                <th>{{print translate "username"}}</th>
+                <th>{{print translate "survivors"}}</th>
+                <th>{{print translate "score"}}</th>
+            </tr>
+            {{
+                each "rank" get "ranking" variables
+                    print "<tr>"
+                    print "<td>"
+                    print get "rank" get "rank" variables
+                    print "</td>"
+                    print "<td>"
+                    print get "username" get "rank" variables
+                    print "</td>"
+                    print "<td>"
+                    print get "survivors" get "rank" variables
+                    print "</td>"
+                    print "<td>"
+                    print get "score" get "rank" variables
+                    print "</td>"
+                    print "</tr>"
+                end
+            }}
+        </table>
+    </div>
 {{include "bottom.html"}}

@@ -13,6 +13,7 @@ import database.templates.BooleanTemplate;
 import database.templates.DoubleTemplate;
 import database.templates.IntegerTemplate;
 import database.templates.ObjectTemplate;
+import database.templates.ObjectTemplateReference;
 import database.templates.StringTemplate;
 
 public class Character extends ObjectTemplate {
@@ -21,9 +22,13 @@ public class Character extends ObjectTemplate {
 	
 	public static final String NAME = "characters";
 	
-	private static final double HUNGER_PER_SECOND = 100.0 / (24.0 * 60.0 * 60.0);
-	private static final double FATIGUE_REGENERATION_PER_SECOND = 100.0 / (8.0 * 60.0 * 60.0);
-	private static final double LOOTER_FATIGUE_DRAW_PER_SECOND = 100.0 / (16.0 * 60.0 * 60.0);
+	private static final double STARVATION_DAMAGE_PER_SECOND = 100.0 / (7.0 * 24.0 * 60.0 * 60.0);
+	
+	private static final double RESTING_FATIGUE_PER_SECOND = 100.0 / (8.0 * 60.0 * 60.0);
+	private static final double RESTING_HUNGER_PER_SECOND = - 100.0 / (7.0 * 24.0 * 60.0 * 60.0);
+	
+	private static final double LOOTER_FATIGUE_PER_SECOND = - 100.0 / (16.0 * 60.0 * 60.0);
+	private static final double LOOTER_HUNGER_PER_SECOND = - 100.0 / (3.0 * 24.0 * 60.0 * 60.0);
 	
 	private StringTemplate name;
 	private BooleanTemplate male;
@@ -39,9 +44,9 @@ public class Character extends ObjectTemplate {
 	private IntegerTemplate focus;
 	private IntegerTemplate intelligence;
 	
-	// private ObjectTemplateReference <>
+	private ObjectTemplateReference <Player> player;
 	
-	public Character() {
+	public Character(Player player) {
 		male = new BooleanTemplate("male");
 		male.set(random.nextBoolean());
 		name = new StringTemplate("name");
@@ -73,30 +78,46 @@ public class Character extends ObjectTemplate {
 		hunger.set(100.0);
 		fatigue = new DoubleTemplate("fatigue", 0.0, 100.0);
 		fatigue.set(100.0);
+		
+		this.player = new ObjectTemplateReference <Player> ("player", Player::new);
+		this.player.set(player);
+	}
+	
+	public Character() {
+		this(null);
 	}
 
 	public void update() {
-		addToDouble(hunger, -HUNGER_PER_SECOND);
 		
 		if(activity.get() == 0) {
 			// Resting
-			addToDouble(fatigue, FATIGUE_REGENERATION_PER_SECOND);
+			addToDouble(fatigue, RESTING_FATIGUE_PER_SECOND);
+			addToDouble(hunger, RESTING_HUNGER_PER_SECOND);
 		} else
 		if(activity.get() == 1) {
 			// Looter
-			addToDouble(fatigue, -LOOTER_FATIGUE_DRAW_PER_SECOND);
+			addToDouble(fatigue, LOOTER_FATIGUE_PER_SECOND);
+			addToDouble(hunger, LOOTER_HUNGER_PER_SECOND);
+			player.get().addItems(0, 1);
 		} else
 		if(activity.get() == 2) {
 			// Looter
-			addToDouble(fatigue, -LOOTER_FATIGUE_DRAW_PER_SECOND);
+			addToDouble(fatigue, LOOTER_FATIGUE_PER_SECOND);
+			addToDouble(hunger, LOOTER_HUNGER_PER_SECOND);
 		} else
 		if(activity.get() == 3) {
 			// Looter
-			addToDouble(fatigue, -LOOTER_FATIGUE_DRAW_PER_SECOND);
+			addToDouble(fatigue, LOOTER_FATIGUE_PER_SECOND);
+			addToDouble(hunger, LOOTER_HUNGER_PER_SECOND);
 		} else
 		if(activity.get() == 4) {
 			// Looter
-			addToDouble(fatigue, -LOOTER_FATIGUE_DRAW_PER_SECOND);
+			addToDouble(fatigue, LOOTER_FATIGUE_PER_SECOND);
+			addToDouble(hunger, LOOTER_HUNGER_PER_SECOND);
+		}
+		
+		if(hunger.get() == hunger.getMinimum()) {
+			addToDouble(health, -STARVATION_DAMAGE_PER_SECOND);
 		}
 	}
 	
@@ -135,6 +156,10 @@ public class Character extends ObjectTemplate {
 		
 		return null;
 		
+	}
+
+	public String getName() {
+		return name.get();
 	}
 	
 }

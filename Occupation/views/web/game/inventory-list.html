@@ -1,0 +1,24 @@
+<p>{{print translate "remaining-space"}}</p>
+<table class="list">
+    {{
+        each "item" get "inventory" variables
+            print "<tr>"
+
+            print "<td>"
+            print "<img class=\"item\" src=\"/media/images/items/"
+            print get "name" get "item" variables
+            print ".png\"></img>"
+            print "</td>"
+
+            print "<td><table><tr><td><h2>"
+            print translate get "name" get "item" variables
+            print "</h2></td></tr><tr><td>"
+            print get "quantity" get "item" variables
+            print " "
+            print translate "pieces"
+            print "</td></tr></table></td>"
+
+            print "</tr>"
+        end
+    }}
+</table>

@@ -8,7 +8,7 @@ import database.templates.ObjectTemplate;
 public class Game extends Thread {
 	
 	private static final int LOOP_TIME = 5000;
-	private static final int MULTIPLIER = 5000;
+	private static final int MULTIPLIER = 5;
 	private boolean paused;
 	private long nextLoop;
 	private Database database;
@@ -18,7 +18,7 @@ public class Game extends Thread {
 		paused = false;
 		this.database = database;
 		
-		System.out.println("Starting Game with Loop Time " + LOOP_TIME + " and Multiplier " + MULTIPLIER + ", Speed is " + (double) MULTIPLIER / LOOP_TIME);
+		System.out.println("Starting Game with Loop Time " + LOOP_TIME + "ms and Multiplier " + MULTIPLIER + ", Speed is " + (double) MULTIPLIER / LOOP_TIME * 1000.0);
 	}
 	
 	@Override

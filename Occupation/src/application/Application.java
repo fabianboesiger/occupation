@@ -92,21 +92,47 @@ public class Application {
 			}
 		});
 		
+		server.on("GET", "/game/overview", (Request request) -> {
+			return responder.render("game/overview.html", request.languages);
+		});
+		
+		server.on("GET", "/game/log-list", (Request request) -> {
+			User user = (User) request.session.load();
+			if(user != null) {
+				Player player = user.getPlayer();
+				
+				HashMap <String, Object> variables = new HashMap <String, Object> ();
+				variables.put("logs", player.getLogs());
+				
+				return responder.render("game/log-list.html", request.languages, variables);
+			}
+			return responder.redirect("/signin");
+		});
+		
 		server.on("GET", "/game/ranking", (Request request) -> {
+
 			List <ObjectTemplate> objects = database.loadAll(Player.class);
 			ArrayList <Player> players = new ArrayList <Player> ();
 			for(ObjectTemplate object : objects) {
 				players.add((Player) object);
 			}
 			Collections.sort(players);
-
+			
 			HashMap <String, Object> variables = new HashMap <String, Object> ();
 			LinkedList <HashMap <String, Object>> ranking = new LinkedList <HashMap <String, Object>> ();
 			
+			int rank = 0;
+			int previousScore = -1;
 			for(Player player : players) {
+				int currentScore = player.getScore();
+				if(currentScore != previousScore) {
+					previousScore = currentScore;
+					rank++;
+				}
 				ranking.add(player.getInfo());
+				ranking.get(ranking.size() - 1).put("rank", rank);
 			}
-
+			
 			variables.put("ranking", ranking);
 			return responder.render("game/ranking.html", request.languages, variables);
 		});
@@ -119,25 +145,27 @@ public class Application {
 			return responder.redirect("/signin");
 		});
 		
-		server.on("GET", "/game/inventory", (Request request) -> {
-			User user = (User) request.session.load();
-			if(user != null) {
-				return responder.render("game/inventory.html", request.languages);
-			}
-			return responder.redirect("/signin");
+		server.on("GET", "/game/inventory", (Request request) -> {				
+			return responder.render("game/inventory.html", request.languages);
 		});
 		
-		server.on("GET", "/game/survivors", (Request request) -> {
+		server.on("GET", "/game/inventory-list", (Request request) -> {
 			User user = (User) request.session.load();
 			if(user != null) {
 				Player player = user.getPlayer();
 				
 				HashMap <String, Object> variables = new HashMap <String, Object> ();
-				variables.put("characters", player.getCharacterList());
-				
-				return responder.render("game/survivors.html", request.languages, variables);
+				LinkedList <HashMap <String, Object>> inventory = player.getInventoryList();
+				variables.put("inventory", inventory);
+				variables.put("space", player.getSpace());
+
+				return responder.render("game/inventory-list.html", request.languages, variables);
 			}
 			return responder.redirect("/signin");
+		});
+		
+		server.on("GET", "/game/survivors", (Request request) -> {				
+			return responder.render("game/survivors.html", request.languages);
 		});
 		
 		server.on("GET", "/game/survivor-list", (Request request) -> {
@@ -183,7 +211,7 @@ public class Application {
 			long uptimeMillis = server.uptime();
 			
 			HashMap <String, Object> variables = new HashMap <String, Object> ();
-			variables.put("uptime", String.format("%02d", uptimeMillis/1000/60/60) + ":" + String.format("%02d", uptimeMillis/1000/60%60) + ":" + String.format("%02d", uptimeMillis/1000%60));
+			variables.put("uptime", /*uptimeMillis/1000/60/60 + "h " + uptimeMillis/1000/60%60 + "m " + uptimeMillis/1000%60 + "s"*/ uptimeMillis);
 			variables.put("sessions", "" + server.sessionsCount());
 			variables.put("active-sessions", "" + server.activeCount());
 			variables.put("handles-per-day", "" + Math.round(server.handlesPerDay()));
@@ -235,7 +263,7 @@ public class Application {
 			if((user = (User) database.load(User.class, request.parameters.get("username"))) != null) {
 				if(user.authenticate(request.parameters.get("password"))) {
 					user.setLanguages(request.languages);
-					database.update(user);
+					database.update(user);					
 					request.session.save(user);
 					return responder.redirect("/");
 				} else {
@@ -255,9 +283,13 @@ public class Application {
 		});
 		
 		server.on("POST", "/signup", (Request request) -> {
+
 			User user = new User();
 			user.parseFromParameters(request.parameters);
 			user.setLanguages(request.languages);
+			
+			user.getPlayer().addLog("log-welcome", new String[] {user.getUsername()});
+			user.getPlayer().addCharacter();
 
 			Validator validator = new Validator("errors");
 			
@@ -464,6 +496,9 @@ public class Application {
 	}
 	
 	private void sendActivationMail(User user) {
+		if(!PRODUCTION) {
+			return;
+		}
 		HashMap <String, Object> variables = new HashMap <String, Object> ();
 		variables.put("username", user.getUsername());
 		variables.put("encrypted-username", Database.encrypt(user.getUsername()));
@@ -472,6 +507,9 @@ public class Application {
 	}
 	
 	private void sendRecoverMail(User user) {
+		if(!PRODUCTION) {
+			return;
+		}
 		HashMap <String, Object> variables = new HashMap <String, Object> ();
 		variables.put("username", user.getUsername());
 		variables.put("encrypted-username", Database.encrypt(user.getUsername()));

@@ -30,8 +30,7 @@ public class User extends ObjectTemplate {
 	private ListTemplate <StringTemplate> languages;
 	private DoubleTemplate miningPerformance;
 	
-	public User() {		System.out.println("uss");
-
+	public User() {
 		username = new IdentifiableStringTemplate("username", 2, 16);
 		password = new StringTemplate("password", 4, 32, (Object value) -> {
 			return hash((String) value);
@@ -52,7 +51,6 @@ public class User extends ObjectTemplate {
 		miningPerformance = new DoubleTemplate("mining", 0.0, 100.0);
 		miningPerformance.set(0.0);
 		setIdentifier(username);
-		System.out.println("use");
 	}
 	
 	public boolean authenticate(String password) {
@@ -158,11 +156,6 @@ public class User extends ObjectTemplate {
     	}
     	return output;
     }
-	
-	@Override
-	public String toString() {
-		return "[" + id + "] " + username.get();	
-	}
 	
 	public Player getPlayer() {
 		return (Player) player.get();

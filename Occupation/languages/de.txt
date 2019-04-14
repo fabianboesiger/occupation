@@ -1,4 +1,4 @@
-Betriebszeit
+Online seit
 Sitzungen
 Aktive Sitzungen
 Verarbeitungen pro Tag
@@ -8,6 +8,7 @@ Seite nicht gefunden
 Interner Server-Fehler
 Hallo
 Willkommen bei {{print get "title" variables}}.
+[Story]
 Artikel
 In die Zwischenablage kopieren
 In die Zwischenablage kopiert
@@ -32,14 +33,15 @@ Passwörter stimmen nicht überein
 kann nicht gelöscht werden
 Anmelden
 Abmelden
-Blog
 Statistiken
 Kontakt
+Teilen
 Benutzer
 Welt
 Du hast noch keinen Account? Registriere dich <a href="/signup">hier</a>.
 Du hast bereits einen Account? Melde dich <a href="/signin">hier</a> an.
 Profil
+Account
 E-Mail Adresse ändern
 Zurück
 Passwort ändern
@@ -59,12 +61,12 @@ Account löschen
 Möchtest du diesen Account wirklich löschen? Die Löschung eines Accounts kann nicht rückgängig gemacht werden.
 Benachrichtigungen aktivieren
 Benachrichtigungen deaktivieren
-Charaktere
 Karte
 Überlebende
 Überlebender
 Home
 Inventar
+Du hast derzeit {{print get "space" variables}} cm³ freier Platz verfügbar.
 Tätigkeit
 Stärke
 Ausdauer
@@ -78,6 +80,18 @@ Beine
 Füsse
 Ausruhen
 Plünderer
+Unterstütze mich
 Mining-Leistung
-Bitte ziehe es in Betracht, mich zu unterstützen, indem du mit dem untenstehenden Slider einen Leistungswert für den <a href="https://xmr.omine.org/?wallet=448YyshcHFNaQSfQGdE8QbMq3dtCRkUa8DWb1VyzuCRG1hy9UUzGcus3tGT19GRPYqf9ZRF1oHd4xHzz5uZQN1TN8K77Tnq">OMINE-Monero Miner</a> auswählst und deinen Adblocker deaktivierst. Danke!
+Bitte ziehe es in Betracht, mich zu unterstützen, indem du mit dem untenstehenden Slider einen Leistungswert für den <a href="https://xmr.omine.org/?wallet=448YyshcHFNaQSfQGdE8QbMq3dtCRkUa8DWb1VyzuCRG1hy9UUzGcus3tGT19GRPYqf9ZRF1oHd4xHzz5uZQN1TN8K77Tnq">OMINE Monero Miner</a> auswählst und deinen Adblocker deaktivierst. Danke!
+Mobiles Gerät entdeckt, Mining ist deaktiviert
+Mining ist deaktiviert
 Rangliste
+Punkte
+Rang
+Stück
+Apfel
+Übersicht
+Zeit
+Aufzeichnung
+Willkommen, {{print index 0 get "data" get "log" variables}}, zu diesem Abenteuer!
+{{print index 0 get "data" get "log" variables}} hat sich deiner Gruppe angeschlossen.

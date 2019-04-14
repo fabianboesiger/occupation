@@ -1,16 +1,19 @@
 <nav>
-	{{
+    {{
         if equals get "username" variables null
             print "<a href=\"/\">"
-			print translate "home"
-			print "</a>"
-			print "<a href=\"/signin\">"
-			print translate "signin"
-			print "</a>"
-		end
+            print translate "home"
+            print "</a>"
+            print "<a href=\"/signin\">"
+            print translate "signin"
+            print "</a>"
+        end
         if not equals get "username" variables null
+            print "<a href=\"/game/overview\">"
+            print translate "overview"
+            print "</a>"
             print "<a href=\"/game/map\">"
-			print translate "map"
+            print translate "map"
             print "</a>"
             print "<a href=\"/game/survivors\">"
             print translate "survivors"
@@ -21,9 +24,9 @@
             print "<a href=\"/game/ranking\">"
             print translate "ranking"
             print "</a>"
-			print "<a href=\"/profile\">"
-			print translate "profile"
-			print "</a>"
-		end
-	}}
+            print "<a href=\"/profile\">"
+            print translate "profile"
+            print "</a>"
+        end
+    }}
 </nav>
